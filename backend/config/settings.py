@@ -103,11 +103,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "https://coffeee-sea.onrender.com",
+    "https://coffeee-sea-frontend.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://coffeee-sea.onrender.com",
+    "https://coffeee-sea-frontend.onrender.com",
 ]
 
 REST_FRAMEWORK = {
