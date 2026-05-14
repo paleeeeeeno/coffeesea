@@ -23,6 +23,7 @@ html {
 
 body {
   margin: 0;
+  min-width: 320px;
   font-family: "Montserrat", sans-serif;
   background: #1d2946;
   color: #f8f8f3;
@@ -65,6 +66,7 @@ img {
   letter-spacing: 0.04em;
   line-height: 0.9;
   text-transform: uppercase;
+  max-width: 100%;
 }
 
 .section-title {
@@ -83,6 +85,7 @@ img {
   text-align: center;
   text-transform: uppercase;
   color: #f8f8f3;
+  max-width: 100%;
 }
 
 .hero-title {
@@ -92,6 +95,7 @@ img {
   line-height: 0.82;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  max-width: 100%;
 }
 
 /* BACKGROUND */
@@ -156,6 +160,8 @@ img {
   filter: brightness(1.08);
 }
 
+/* ANIMATION */
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -193,9 +199,23 @@ img {
   overflow: hidden;
 }
 
-/* =====================================================
-   MOBILE ADAPTIVE — MAIN FIX
-   ===================================================== */
+/* TABLET */
+
+@media (max-width: 1024px) {
+  .page-section {
+    padding: 64px 22px;
+  }
+
+  .page-title {
+    font-size: clamp(52px, 9vw, 100px);
+  }
+
+  .hero-title {
+    font-size: clamp(72px, 12vw, 150px);
+  }
+}
+
+/* MOBILE */
 
 @media (max-width: 768px) {
   html,
@@ -206,14 +226,19 @@ img {
     overflow-x: hidden !important;
   }
 
-  body {
-    min-width: 320px;
-  }
-
   main,
   header,
   footer,
-  section {
+  section,
+  article,
+  div {
+    max-width: 100%;
+  }
+
+  header,
+  footer,
+  section,
+  main {
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
@@ -237,15 +262,13 @@ img {
     max-width: 100%;
   }
 
-  /* ВАЖНО: огромный Oi уменьшаем на телефоне */
-
   .logo-text {
     font-size: clamp(34px, 12vw, 58px) !important;
     line-height: 0.88 !important;
     letter-spacing: -0.045em !important;
     text-align: center;
     max-width: 100%;
-    overflow: hidden;
+    overflow-wrap: break-word;
   }
 
   .page-title {
@@ -253,7 +276,7 @@ img {
     line-height: 0.88 !important;
     letter-spacing: -0.045em !important;
     max-width: 100%;
-    overflow: hidden;
+    overflow-wrap: break-word;
     text-align: center;
   }
 
@@ -262,17 +285,15 @@ img {
     line-height: 0.82 !important;
     letter-spacing: -0.055em !important;
     max-width: 100%;
-    overflow: hidden;
+    overflow-wrap: break-word;
     text-align: center;
   }
 
   .section-title {
-    font-size: clamp(24px, 8vw, 38px);
+    font-size: clamp(24px, 8vw, 38px) !important;
     line-height: 1.08;
     letter-spacing: 0.035em;
   }
-
-  /* длинные заголовки */
 
   .contacts-title,
   .profile-title,
@@ -287,20 +308,61 @@ img {
     font-size: clamp(34px, 11vw, 54px) !important;
   }
 
-  /* карточки и блоки */
-
-  .glass-card {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 20px;
+  p,
+  span,
+  li,
+  a {
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
+  nav {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  nav a {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  .flex {
+    min-width: 0;
+  }
+
+  .flex > * {
+    min-width: 0;
+  }
+
+  .grid,
+  .menu-grid,
+  .products-grid,
+  .cards-grid,
+  .profile-grid,
+  .orders-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .glass-card,
+  .menu-card,
+  .product-card,
+  .popular-card,
   .responsive-card {
     width: 100%;
     max-width: 100%;
+    min-height: auto !important;
+    border-radius: 20px;
+    padding: 18px !important;
   }
-
-  /* формы */
 
   input,
   textarea,
@@ -310,41 +372,30 @@ img {
     max-width: 100%;
   }
 
+  button,
+  .button,
+  .btn {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .form-field {
+    width: 100%;
+    max-width: 100%;
+    padding: 14px 16px;
+  }
+
   textarea {
     min-height: 150px;
   }
 
-  /* картинки */
-
   img {
     max-width: 100%;
-  }
-
-  /* карты */
-
-  iframe {
-    width: 100%;
-    max-width: 100%;
-    height: 340px !important;
-  }
-
-  /* отключаем hover на телефоне */
-
-  .glow-hover:hover,
-  .image-hover:hover {
-    transform: none;
-    filter: none;
-    box-shadow: none;
-  }
-
-  /* карточки товаров */
-
-  .menu-card,
-  .product-card,
-  .popular-card {
-    width: 100%;
-    max-width: 100%;
-    min-height: auto !important;
   }
 
   .menu-card img,
@@ -352,6 +403,76 @@ img {
   .popular-card img {
     height: 220px !important;
     width: 100%;
+    object-fit: cover;
+    border-radius: 18px;
+  }
+
+  iframe {
+    width: 100%;
+    max-width: 100%;
+    height: 340px !important;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .glow-hover:hover,
+  .image-hover:hover {
+    transform: none;
+    filter: none;
+    box-shadow: none;
+  }
+}
+
+/* SMALL PHONES */
+
+@media (max-width: 480px) {
+  .page-section {
+    padding: 42px 14px;
+  }
+
+  .logo-text {
+    font-size: clamp(28px, 10vw, 42px) !important;
+    line-height: 0.9 !important;
+  }
+
+  .page-title {
+    font-size: clamp(28px, 10vw, 46px) !important;
+    line-height: 0.9 !important;
+  }
+
+  .hero-title {
+    font-size: clamp(40px, 14vw, 64px) !important;
+    line-height: 0.82 !important;
+  }
+
+  .section-title {
+    font-size: 24px !important;
+  }
+
+  p,
+  span,
+  a,
+  li,
+  button,
+  input,
+  textarea {
+    font-size: 14px;
+  }
+
+  .glass-card,
+  .menu-card,
+  .product-card,
+  .popular-card {
+    border-radius: 18px !important;
+    padding: 14px !important;
+  }
+
+  iframe {
+    height: 260px !important;
   }
 }
 
@@ -359,20 +480,20 @@ img {
 
 @media (max-width: 390px) {
   .page-section {
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   .logo-text {
-    font-size: clamp(30px, 11vw, 46px) !important;
+    font-size: clamp(26px, 10vw, 40px) !important;
   }
 
   .page-title {
-    font-size: clamp(30px, 11vw, 48px) !important;
+    font-size: clamp(26px, 10vw, 42px) !important;
   }
 
   .hero-title {
-    font-size: clamp(44px, 15vw, 68px) !important;
+    font-size: clamp(38px, 14vw, 58px) !important;
   }
 
   .contacts-title,
