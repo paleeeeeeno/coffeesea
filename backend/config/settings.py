@@ -107,7 +107,9 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+   "http://localhost:5173",
     "https://coffeee-sea-frontend.onrender.com",
+    "https://*.onrender.com",
 ]
 
 REST_FRAMEWORK = {
