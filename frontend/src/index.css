@@ -1,13 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oi&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oi&display=swap");
 @import "tailwindcss";
 
-* {
+/* RESET */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
   background: #1d2946;
   color: #f8f8f3;
 }
@@ -17,147 +33,80 @@ a {
   text-decoration: none;
 }
 
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  max-width: 100%;
+}
+
 button {
   cursor: pointer;
 }
 
-img {
-  max-width: 100%;
+img,
+svg,
+video,
+canvas {
   display: block;
+  max-width: 100%;
 }
 
+img {
+  object-fit: cover;
+}
+
+/* TYPOGRAPHY */
+
 .logo-text {
-  font-family: 'Oi', serif;
+  font-family: "Oi", serif;
   font-weight: 400;
   letter-spacing: 0.04em;
-  line-height: 1;
+  line-height: 0.9;
   text-transform: uppercase;
 }
 
 .section-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+.page-title {
+  font-family: "Oi", serif;
+  font-weight: 400;
+  font-size: clamp(70px, 9vw, 135px);
+  line-height: 0.9;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-transform: uppercase;
+  color: #f8f8f3;
+}
+
+.hero-title {
+  font-family: "Oi", serif;
+  font-weight: 400;
+  font-size: clamp(90px, 13vw, 220px);
+  line-height: 0.82;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* BACKGROUND */
+
 .wave-bg {
   background-color: #1d2946;
   background-image:
-    linear-gradient(rgba(7, 16, 31, 0.3), rgba(7, 16, 31, 0.3)),
+    linear-gradient(rgba(7, 16, 31, 0.38), rgba(7, 16, 31, 0.38)),
     url("/images/waves-bg.png");
   background-size: cover;
   background-position: center;
   background-repeat: repeat-y;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-12px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-12px);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(45px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slowScale {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.04);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-.wave-bg {
-  animation: waveMove 45s linear infinite;
-}
-
-.fade-up {
-  animation: fadeUp 0.9s ease both;
-}
-
-.float-animation {
-  animation: float 5s ease-in-out infinite;
-}
-
-.slow-scale {
-  animation: slowScale 9s ease-in-out infinite;
-}
-
-.glow-hover {
-  transition:
-    transform 0.4s ease,
-    box-shadow 0.4s ease,
-    border-color 0.4s ease;
-}
-
-.glow-hover:hover {
-  transform: translateY(-10px);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow:
-    0 0 25px rgba(255, 255, 255, 0.15),
-    0 0 70px rgba(111, 180, 255, 0.12);
-}
-
-.image-hover {
-  transition:
-    transform 0.6s ease,
-    filter 0.6s ease;
-}
-
-.image-hover:hover {
-  transform: scale(1.05);
-  filter: brightness(1.1);
-}
+/* COMMON UI */
 
 .glass-card {
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -165,84 +114,270 @@ img {
   backdrop-filter: blur(10px);
 }
 
-/* ===== MOBILE FINAL FIX ===== */
+.form-field {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(7, 16, 31, 0.72);
+  color: #fff;
+  outline: none;
+}
 
-html,
-body,
-#root {
+.form-field::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.form-field:focus {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.glow-hover {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.glow-hover:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 0 25px rgba(255, 255, 255, 0.12),
+    0 0 60px rgba(111, 180, 255, 0.1);
+}
+
+.image-hover {
+  transition:
+    transform 0.5s ease,
+    filter 0.5s ease;
+}
+
+.image-hover:hover {
+  transform: scale(1.04);
+  filter: brightness(1.08);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.8s ease both;
+}
+
+/* PAGE HELPERS */
+
+.page-section {
+  min-height: 100vh;
+  width: 100%;
+  padding: 80px 24px;
+  overflow-x: hidden;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.responsive-card {
+  width: 100%;
   max-width: 100%;
-  overflow-x: hidden !important;
+  overflow: hidden;
 }
 
-body {
-  width: 100%;
-}
-
-main,
-section,
-header,
-footer {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-.wave-bg {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+/* =====================================================
+   MOBILE ADAPTIVE — MAIN FIX
+   ===================================================== */
 
 @media (max-width: 768px) {
-  .logo-text,
-  .page-title,
-  .hero-title {
+  html,
+  body,
+  #root {
+    width: 100%;
     max-width: 100%;
-    overflow: hidden;
-    text-align: center;
-    line-height: 0.9 !important;
-    letter-spacing: -0.04em !important;
+    overflow-x: hidden !important;
   }
 
-  .logo-text {
-    font-size: clamp(38px, 14vw, 68px) !important;
+  body {
+    min-width: 320px;
   }
 
-  .page-title {
-    font-size: clamp(38px, 13vw, 64px) !important;
+  main,
+  header,
+  footer,
+  section {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
-  .hero-title {
-    font-size: clamp(54px, 16vw, 82px) !important;
+  .wave-bg {
+    width: 100%;
+    max-width: 100vw;
+    background-size: auto 1000px;
+    background-position: top center;
+    background-repeat: repeat-y;
   }
 
-  .glass-card {
+  .page-section {
+    min-height: auto;
+    padding: 48px 16px;
+  }
+
+  .page-container {
     width: 100%;
     max-width: 100%;
   }
 
-  img {
+  /* ВАЖНО: огромный Oi уменьшаем на телефоне */
+
+  .logo-text {
+    font-size: clamp(34px, 12vw, 58px) !important;
+    line-height: 0.88 !important;
+    letter-spacing: -0.045em !important;
+    text-align: center;
     max-width: 100%;
+    overflow: hidden;
   }
 
-  .wave-bg {
-    background-size: auto 1000px;
-    background-position: top center;
+  .page-title {
+    font-size: clamp(36px, 12vw, 60px) !important;
+    line-height: 0.88 !important;
+    letter-spacing: -0.045em !important;
+    max-width: 100%;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 17vw, 82px) !important;
+    line-height: 0.82 !important;
+    letter-spacing: -0.055em !important;
+    max-width: 100%;
+    overflow: hidden;
+    text-align: center;
   }
 
   .section-title {
     font-size: clamp(24px, 8vw, 38px);
-    line-height: 1.1;
+    line-height: 1.08;
+    letter-spacing: 0.035em;
   }
+
+  /* длинные заголовки */
+
+  .contacts-title,
+  .profile-title,
+  .register-title {
+    font-size: clamp(28px, 9vw, 42px) !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  .cart-title,
+  .cafes-title,
+  .menu-title {
+    font-size: clamp(34px, 11vw, 54px) !important;
+  }
+
+  /* карточки и блоки */
+
+  .glass-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px;
+  }
+
+  .responsive-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* формы */
 
   input,
   textarea,
   select,
   button {
+    min-width: 0;
     max-width: 100%;
   }
 
-  iframe {
+  textarea {
+    min-height: 150px;
+  }
+
+  /* картинки */
+
+  img {
     max-width: 100%;
+  }
+
+  /* карты */
+
+  iframe {
+    width: 100%;
+    max-width: 100%;
+    height: 340px !important;
+  }
+
+  /* отключаем hover на телефоне */
+
+  .glow-hover:hover,
+  .image-hover:hover {
+    transform: none;
+    filter: none;
+    box-shadow: none;
+  }
+
+  /* карточки товаров */
+
+  .menu-card,
+  .product-card,
+  .popular-card {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto !important;
+  }
+
+  .menu-card img,
+  .product-card img,
+  .popular-card img {
+    height: 220px !important;
+    width: 100%;
+  }
+}
+
+/* VERY SMALL PHONES */
+
+@media (max-width: 390px) {
+  .page-section {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .logo-text {
+    font-size: clamp(30px, 11vw, 46px) !important;
+  }
+
+  .page-title {
+    font-size: clamp(30px, 11vw, 48px) !important;
+  }
+
+  .hero-title {
+    font-size: clamp(44px, 15vw, 68px) !important;
+  }
+
+  .contacts-title,
+  .profile-title,
+  .register-title {
+    font-size: 28px !important;
   }
 }

@@ -29,7 +29,7 @@ export default function Menu() {
         <div className="absolute left-[-120px] top-40 h-[300px] w-[300px] animate-pulse rounded-full bg-cyan-400/10 blur-3xl" />
 
         <div className="relative z-10 mx-auto max-w-7xl">
-          <h1 className="logo-text fade-up text-center text-6xl uppercase md:text-8xl">
+          <h1 className="page-title menu-title">
             Меню
           </h1>
 

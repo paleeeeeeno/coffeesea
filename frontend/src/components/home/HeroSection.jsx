@@ -2,7 +2,7 @@ export default function HeroSection() {
   return (
     <section className="wave-bg text-center">
       <div className="px-6 py-24">
-        <h1 className="logo-text text-[120px] leading-none md:text-[140px]">
+        <h1 className="hero-title fade-up">
           Coffee Sea
         </h1>
 

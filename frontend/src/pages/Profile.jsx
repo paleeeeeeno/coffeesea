@@ -38,7 +38,7 @@ export default function Profile() {
 
       <section className="wave-bg min-h-screen px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <h1 className="logo-text fade-up text-center text-6xl uppercase md:text-8xl">
+          <h1 className="page-title profile-title fade-up">
             Профиль
           </h1>
 

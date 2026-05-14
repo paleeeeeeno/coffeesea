@@ -47,10 +47,9 @@ export default function Cart() {
 
       <section className="wave-bg min-h-screen px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <h1 className="logo-text fade-up text-center text-6xl uppercase md:text-8xl">
+          <h1 className="page-title cart-title">
             Корзина
           </h1>
-
           {cart.length === 0 ? (
             <div className="glass-card glow-hover mx-auto mt-12 max-w-xl p-8 text-center">
               <p className="text-xl uppercase text-white/70">

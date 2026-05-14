@@ -62,7 +62,7 @@ export default function Checkout() {
 
       <section className="wave-bg min-h-screen px-6 py-20">
         <div className="mx-auto max-w-4xl">
-          <h1 className="logo-text fade-up text-center text-6xl uppercase md:text-8xl">
+          <h1 className="page-title fade-up">
             Оформление
           </h1>
 

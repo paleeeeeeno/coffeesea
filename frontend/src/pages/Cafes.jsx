@@ -32,7 +32,7 @@ export default function Cafes() {
         <div className="absolute right-[-120px] top-32 h-[300px] w-[300px] animate-pulse rounded-full bg-white/10 blur-3xl" />
 
         <div className="relative z-10 mx-auto max-w-7xl">
-          <h1 className="logo-text fade-up text-center text-6xl uppercase md:text-8xl">
+          <h1 className="page-title cafes-title">
             Кофейни
           </h1>
 
