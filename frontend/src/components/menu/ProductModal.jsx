@@ -1,19 +1,18 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
+import { getProductImage } from "../../utils/getProductImage";
 
 export default function ProductModal({ product, onClose }) {
   const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || null);
+
   const [selectedModifiers, setSelectedModifiers] = useState([]);
 
-  const imageUrl = product.image
-    ? `http://127.0.0.1:8000${product.image}`
-    : "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085";
-
   function toggleModifier(modifier) {
-    const exists = selectedModifiers.find((item) => item.id === modifier.id);
+    const exists = selectedModifiers.find((m) => m.id === modifier.id);
 
     if (exists) {
       setSelectedModifiers(
-        selectedModifiers.filter((item) => item.id !== modifier.id)
+        selectedModifiers.filter((m) => m.id !== modifier.id)
       );
     } else {
       setSelectedModifiers([...selectedModifiers, modifier]);
@@ -40,7 +39,6 @@ export default function ProductModal({ product, onClose }) {
       id: Date.now(),
       productId: product.id,
       name: product.name,
-      image: product.image,
       size: selectedSize,
       modifiers: selectedModifiers,
       quantity: 1,
@@ -48,28 +46,48 @@ export default function ProductModal({ product, onClose }) {
     });
 
     localStorage.setItem("cart", JSON.stringify(cart));
+
     onClose();
+
     alert("Товар добавлен в корзину");
   }
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
-      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto border border-white/20 bg-[#07101f] p-6 shadow-2xl">
-        <div className="grid gap-6 md:grid-cols-2">
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 px-4 py-6 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="glass-card relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-[28px] p-5 md:p-7"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute right-5 top-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/30 text-xl text-white hover:bg-white hover:text-[#07101f]"
+        >
+          ×
+        </button>
+
+        <div className="grid gap-7 md:grid-cols-[0.95fr_1.05fr]">
           <img
-            src={imageUrl}
+            src={getProductImage(product)}
             alt={product.name}
-            className="h-80 w-full object-cover"
+            loading="lazy"
+            className="h-[260px] w-full rounded-[20px] object-cover md:h-[460px]"
           />
 
-          <div>
-            <h2 className="text-4xl font-black uppercase">{product.name}</h2>
+          <div className="pr-0 md:pr-10">
+            <h2 className="section-title text-3xl uppercase text-white md:text-5xl">
+              {product.name}
+            </h2>
 
-            <p className="mt-4 text-sm uppercase leading-6 text-white/70">
+            <p className="mt-4 text-sm uppercase leading-7 text-white/70 md:text-base">
               {product.description}
             </p>
 
-            <h3 className="mt-6 font-black uppercase">Размер</h3>
+            <h3 className="mt-6 text-lg font-black uppercase text-white">
+              Размер
+            </h3>
 
             <div className="mt-3 flex flex-wrap gap-3">
               {product.sizes?.length > 0 ? (
@@ -77,61 +95,60 @@ export default function ProductModal({ product, onClose }) {
                   <button
                     key={size.id}
                     onClick={() => setSelectedSize(size)}
-                    className={`border px-4 py-2 uppercase ${
+                    className={`border px-4 py-2 text-sm uppercase transition ${
                       selectedSize?.id === size.id
-                        ? "bg-white text-[#1d2946]"
-                        : "border-white"
+                        ? "bg-white text-[#07101f]"
+                        : "border-white text-white hover:bg-white hover:text-[#07101f]"
                     }`}
                   >
                     {size.name} — {size.price}₽
                   </button>
                 ))
               ) : (
-                <p className="text-white/70">Размеры не добавлены</p>
+                <p className="text-white/55">Размеры не добавлены</p>
               )}
             </div>
 
-            <h3 className="mt-6 font-black uppercase">Добавки</h3>
+            <h3 className="mt-6 text-lg font-black uppercase text-white">
+              Добавки
+            </h3>
 
             <div className="mt-3 grid gap-3">
               {product.modifiers?.length > 0 ? (
                 product.modifiers.map((modifier) => (
                   <label
                     key={modifier.id}
-                    className="flex items-center gap-3 uppercase text-white/80"
+                    className="flex items-center gap-3 text-sm uppercase text-white/80 md:text-base"
                   >
                     <input
                       type="checkbox"
                       onChange={() => toggleModifier(modifier)}
                     />
+
                     {modifier.name} +{modifier.price}₽
                   </label>
                 ))
               ) : (
-                <p className="text-white/70">Добавки не добавлены</p>
+                <p className="text-white/55">Добавки не добавлены</p>
               )}
             </div>
 
-            <div className="mt-8 flex items-center justify-between">
-              <strong className="text-3xl">{getFinalPrice()}₽</strong>
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <strong className="text-4xl font-black text-white">
+                {getFinalPrice()}₽
+              </strong>
 
               <button
                 onClick={addToCart}
-                className="border border-white px-5 py-3 uppercase hover:bg-white hover:text-[#1d2946]"
+                className="border border-white px-8 py-3 uppercase tracking-[0.15em] text-white transition hover:bg-white hover:text-[#07101f]"
               >
-                В корзину
+                Добавить
               </button>
             </div>
-
-            <button
-              onClick={onClose}
-              className="mt-5 text-sm uppercase text-white/60 hover:text-white"
-            >
-              Закрыть
-            </button>
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
