@@ -4,7 +4,6 @@ import { getProductImage } from "../../utils/getProductImage";
 
 export default function ProductModal({ product, onClose }) {
   const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || null);
-
   const [selectedModifiers, setSelectedModifiers] = useState([]);
 
   function toggleModifier(modifier) {
@@ -46,24 +45,24 @@ export default function ProductModal({ product, onClose }) {
     });
 
     localStorage.setItem("cart", JSON.stringify(cart));
-
     onClose();
-
     alert("Товар добавлен в корзину");
   }
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 px-4 py-6 backdrop-blur-sm"
+      className="fixed inset-0 z-[9999999] overflow-y-auto overscroll-contain bg-black/80 px-4 py-6 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="glass-card relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-[28px] p-5 md:p-7"
+        className="glass-card relative mx-auto mt-10 w-full max-w-5xl rounded-[28px] p-5 md:p-7"
         onClick={(e) => e.stopPropagation()}
       >
         <button
+          type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/30 text-xl text-white hover:bg-white hover:text-[#07101f]"
+          className="absolute right-4 top-4 z-[1000000] flex h-11 w-11 min-w-0 items-center justify-center rounded-full border border-white/40 bg-[#07101f]/90 p-0 text-3xl leading-none text-white transition hover:bg-white hover:text-[#07101f]"
+          aria-label="Закрыть"
         >
           ×
         </button>
@@ -77,7 +76,7 @@ export default function ProductModal({ product, onClose }) {
           />
 
           <div className="pr-0 md:pr-10">
-            <h2 className="section-title text-3xl uppercase text-white md:text-5xl">
+            <h2 className="section-title max-w-[90%] text-3xl uppercase text-white md:text-5xl">
               {product.name}
             </h2>
 
@@ -123,8 +122,8 @@ export default function ProductModal({ product, onClose }) {
                     <input
                       type="checkbox"
                       onChange={() => toggleModifier(modifier)}
+                      className="h-5 w-5"
                     />
-
                     {modifier.name} +{modifier.price}₽
                   </label>
                 ))

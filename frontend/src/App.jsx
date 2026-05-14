@@ -22,7 +22,7 @@ export default function App() {
       <div className="min-h-screen overflow-x-hidden bg-[#1d2946] text-[#f8f8f3]">
         <Header />
 
-        <main className="pt-[65px]">
+        <main className="pt-[72px]">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />

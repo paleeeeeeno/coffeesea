@@ -502,3 +502,46 @@ img {
     font-size: 28px !important;
   }
 }
+
+/* FIX MODAL AND MOBILE MENU */
+.modal-close-btn {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  padding: 0 !important;
+}
+
+/* IOS SAFARI FIXES */
+html,
+body,
+#root {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  position: relative;
+}
+
+@supports (-webkit-touch-callout: none) {
+  body {
+    min-height: -webkit-fill-available;
+  }
+
+  .wave-bg {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  header svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  header button svg {
+    width: 48px;
+    height: 48px;
+  }
+}
+}
