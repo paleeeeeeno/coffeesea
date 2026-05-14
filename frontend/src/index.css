@@ -164,3 +164,85 @@ img {
   background: rgba(7, 16, 31, 0.78);
   backdrop-filter: blur(10px);
 }
+
+/* ===== MOBILE FINAL FIX ===== */
+
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+body {
+  width: 100%;
+}
+
+main,
+section,
+header,
+footer {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.wave-bg {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .logo-text,
+  .page-title,
+  .hero-title {
+    max-width: 100%;
+    overflow: hidden;
+    text-align: center;
+    line-height: 0.9 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  .logo-text {
+    font-size: clamp(38px, 14vw, 68px) !important;
+  }
+
+  .page-title {
+    font-size: clamp(38px, 13vw, 64px) !important;
+  }
+
+  .hero-title {
+    font-size: clamp(54px, 16vw, 82px) !important;
+  }
+
+  .glass-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .wave-bg {
+    background-size: auto 1000px;
+    background-position: top center;
+  }
+
+  .section-title {
+    font-size: clamp(24px, 8vw, 38px);
+    line-height: 1.1;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    max-width: 100%;
+  }
+
+  iframe {
+    max-width: 100%;
+  }
+}

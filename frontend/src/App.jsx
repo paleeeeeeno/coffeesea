@@ -19,7 +19,7 @@ import NotFound from "./pages/NotFound";
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#1d2946] text-[#f8f8f3]">
+      <div className="min-h-screen overflow-x-hidden bg-[#1d2946] text-[#f8f8f3]">
         <Header />
 
         <main className="pt-[65px]">
