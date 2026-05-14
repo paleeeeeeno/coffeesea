@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /cart
+Disallow: /checkout
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /forgot-password
+
+Host: coffeesee.ru
+Sitemap: https://coffeesee.ru/sitemap.xml
