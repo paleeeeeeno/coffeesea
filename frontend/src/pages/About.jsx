@@ -36,7 +36,7 @@ export default function About() {
             </div>
 
             <img
-              src="\public\images\about.webp"
+              src="/images/about.webp"
               alt="Море"
               className="h-[400px] w-full rounded-[26px] object-cover object-center shadow-2xl"
             />
@@ -66,7 +66,7 @@ export default function About() {
 
           <div className="mt-20 grid items-center gap-10 lg:grid-cols-2">
             <img
-              src="\public\images\coffee.webp"
+              src="/images/coffee.webp"
               alt="Кофе"
               className="image-hover h-[430px] w-full object-cover shadow-2xl"
             />
