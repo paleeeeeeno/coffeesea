@@ -1,65 +1,92 @@
+import { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import ProtectedRoute from "./router/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./router/ProtectedRoute";
 
-import About from "./pages/About";
-import Cafes from "./pages/Cafes";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Contacts from "./pages/Contacts";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Menu from "./pages/Menu";
-import NotFound from "./pages/NotFound";
-import Profile from "./pages/Profile";
-import Register from "./pages/Register";
+const Home = lazy(() => import("./pages/Home"));
+const Menu = lazy(() => import("./pages/Menu"));
+const About = lazy(() => import("./pages/About"));
+const Cafes = lazy(() => import("./pages/Cafes"));
+const Contacts = lazy(() => import("./pages/Contacts"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Profile = lazy(() => import("./pages/Profile"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 10,
+      gcTime: 1000 * 60 * 30,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
+function PageLoader() {
+  return (
+    <section className="wave-bg flex min-h-screen items-center justify-center px-6 py-20">
+      <p className="uppercase tracking-[0.25em] text-white/60">
+        Загрузка...
+      </p>
+    </section>
+  );
+}
 
 export default function App() {
   return (
-    <BrowserRouter>
-     <ScrollToTop />
-      <div className="min-h-screen overflow-x-hidden bg-[#1d2946] text-[#f8f8f3]">
-        <Header />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ScrollToTop />
 
-        <main className="pt-[73px]">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<Menu />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/cafes" element={<Cafes />} />
-            <Route path="/contacts" element={<Contacts />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/cart" element={<Cart />} />
+        <div className="min-h-screen overflow-x-hidden bg-[#1d2946] text-[#f8f8f3]">
+          <Header />
 
-            <Route
-              path="/checkout"
-              element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              }
-            />
+          <main className="pt-[73px]">
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/menu" element={<Menu />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/cafes" element={<Cafes />} />
+                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/cart" element={<Cart />} />
 
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
+                    </ProtectedRoute>
+                  }
+                />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
 
-        <Footer />
-      </div>
-    </BrowserRouter>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </main>
+
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }

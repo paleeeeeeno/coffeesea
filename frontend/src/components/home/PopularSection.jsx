@@ -1,7 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "../../api/client";
 import ProductModal from "../menu/ProductModal";
 import { getProductImage } from "../../utils/getProductImage";
+
+function normalizeProducts(data) {
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.results)) return data.results;
+  return [];
+}
+
+async function fetchPopularProducts() {
+  const res = await api.get("/products/popular/");
+  return normalizeProducts(res.data).slice(0, 4);
+}
 
 function getPrice(product) {
   const raw =
@@ -51,7 +63,7 @@ function PopularCard({ product, variant = "small", onOpen }) {
                 ? "text-[28px] md:text-[34px]"
                 : "text-[24px] md:text-[28px]"
           }`}
->
+        >
           {product?.name}
         </h3>
 
@@ -82,31 +94,12 @@ function PopularCard({ product, variant = "small", onOpen }) {
 }
 
 export default function PopularSection() {
-  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  useEffect(() => {
-    let ignore = false;
-
-    api
-      .get("/products/popular/")
-      .then((res) => {
-        if (ignore) return;
-
-        const data = Array.isArray(res.data)
-          ? res.data
-          : Array.isArray(res.data?.results)
-            ? res.data.results
-            : [];
-
-        setProducts(data.slice(0, 4));
-      })
-      .catch((err) => console.log("Ошибка загрузки популярных:", err));
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+  const { data: products = [] } = useQuery({
+    queryKey: ["popular-products"],
+    queryFn: fetchPopularProducts,
+  });
 
   if (products.length === 0) return null;
 

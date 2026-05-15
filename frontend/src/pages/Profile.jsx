@@ -1,38 +1,58 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Seo from "../components/Seo";
 import { api } from "../api/client";
 
+function normalizeOrders(data) {
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.results)) return data.results;
+  return [];
+}
+
+async function fetchBonus() {
+  const res = await api.get("/bonus/");
+  return res.data?.points || 0;
+}
+
+async function fetchOrders() {
+  const res = await api.get("/orders/history/");
+  return normalizeOrders(res.data);
+}
+
 export default function Profile() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const [bonus, setBonus] = useState(0);
-  const [orders, setOrders] = useState([]);
-  const [error, setError] = useState("");
+  const {
+    data: bonus = 0,
+    isError: bonusError,
+  } = useQuery({
+    queryKey: ["profile-bonus"],
+    queryFn: fetchBonus,
+    retry: 1,
+  });
 
-  useEffect(() => {
-    api
-      .get("/bonus/")
-      .then((res) => setBonus(res.data.points || 0))
-      .catch(() => setError("Войдите в аккаунт, чтобы увидеть бонусы."));
+  const {
+    data: orders = [],
+    isError: ordersError,
+  } = useQuery({
+    queryKey: ["profile-orders"],
+    queryFn: fetchOrders,
+    retry: 1,
+  });
 
-    api
-      .get("/orders/history/")
-      .then((res) => {
-        const data = Array.isArray(res.data)
-          ? res.data
-          : Array.isArray(res.data?.results)
-            ? res.data.results
-            : [];
-
-        setOrders(data);
-      })
-      .catch(() => setError("Войдите в аккаунт, чтобы увидеть историю заказов."));
-  }, []);
+  const error =
+    bonusError || ordersError
+      ? "Войдите в аккаунт, чтобы увидеть бонусы и историю заказов."
+      : "";
 
   function logout() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+
+    queryClient.removeQueries({ queryKey: ["profile-bonus"] });
+    queryClient.removeQueries({ queryKey: ["profile-orders"] });
+
     navigate("/login");
   }
 

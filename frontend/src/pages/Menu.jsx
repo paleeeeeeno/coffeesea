@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Seo from "../components/Seo";
 import { api } from "../api/client";
 import MenuProductCard, {
@@ -25,43 +26,26 @@ function getCategoryName(product) {
   return product?.category?.name || product?.category_name || "Все";
 }
 
+async function fetchProducts() {
+  const res = await api.get("/products/");
+  return normalizeProducts(res.data);
+}
+
 export default function Menu() {
-  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("default");
 
-  useEffect(() => {
-    let ignore = false;
-
-    setLoading(true);
-    setError("");
-
-    api
-      .get("/products/")
-      .then((res) => {
-        if (!ignore) setProducts(normalizeProducts(res.data));
-      })
-      .catch((err) => {
-        console.log("Ошибка загрузки меню:", err);
-
-        if (!ignore) {
-          setProducts([]);
-          setError("Не удалось загрузить меню");
-        }
-      })
-      .finally(() => {
-        if (!ignore) setLoading(false);
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
 
   const categories = useMemo(() => {
     const unique = new Set();
@@ -171,26 +155,26 @@ export default function Menu() {
             </label>
           </div>
 
-          {loading && (
+          {isLoading && (
             <p className="mt-10 text-center uppercase text-white/70">
               Загрузка меню...
             </p>
           )}
 
-          {!loading && error && (
+          {isError && (
             <p className="mt-10 text-center uppercase text-red-200">
-              {error}
+              Не удалось загрузить меню
             </p>
           )}
 
-          {!loading && !error && products.length === 0 && (
+          {!isLoading && !isError && products.length === 0 && (
             <p className="mt-10 text-center uppercase text-white/70">
               Товары пока не добавлены
             </p>
           )}
 
-          {!loading &&
-            !error &&
+          {!isLoading &&
+            !isError &&
             products.length > 0 &&
             filteredProducts.length === 0 && (
               <p className="mt-10 text-center uppercase text-white/70">
