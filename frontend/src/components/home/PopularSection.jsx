@@ -43,15 +43,15 @@ function PopularCard({ product, variant = "small", onOpen }) {
         onClick={() => onOpen(product)}
         className="relative z-10 flex h-full w-full flex-col items-start justify-end p-6 text-left md:p-7"
       >
-        <span className="mb-4 text-xs uppercase tracking-[0.45em] text-[#d6a866]">
-          Coffee Sea
-        </span>
-
         <h3
-          className={`section-title text-white ${
-            isBig ? "text-[54px]" : isWide ? "text-[46px]" : "text-[34px]"
+          className={`section-title max-w-full overflow-hidden break-words leading-[0.92] text-white ${
+            isBig
+              ? "text-[34px] md:text-[42px]"
+              : isWide
+                ? "text-[28px] md:text-[34px]"
+                : "text-[24px] md:text-[28px]"
           }`}
-        >
+>
           {product?.name}
         </h3>
 
@@ -113,7 +113,7 @@ export default function PopularSection() {
   return (
     <section className="wave-bg page-section overflow-hidden">
       <div className="page-container">
-        <h2 className="page-title mb-10">Популярное</h2>
+        <h2 className="page-title mb-5">Популярное</h2>
 
         <div className="mx-auto grid max-w-[1320px] gap-6 lg:grid-cols-[1.1fr_1fr]">
           {products[0] && (
