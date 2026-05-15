@@ -379,3 +379,48 @@ img {
     min-height: -webkit-fill-available;
   }
 }
+
+/* ===== MODAL + MOBILE FORM FIX ===== */
+
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 9999999;
+}
+
+@media (max-width: 768px) {
+  .modal-root {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .modal-root .glass-card {
+    max-height: none;
+  }
+
+  .modal-close-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  .page-title,
+  .hero-title,
+  .logo-text {
+    padding-top: 0.08em;
+    padding-bottom: 0.08em;
+    overflow: visible !important;
+  }
+
+  form button[type="submit"],
+  form button,
+  .auth-button {
+    min-height: 54px;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .modal-root {
+    min-height: -webkit-fill-available;
+  }
+}
