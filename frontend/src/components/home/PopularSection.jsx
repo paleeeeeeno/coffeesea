@@ -113,7 +113,7 @@ export default function PopularSection() {
   return (
     <section className="wave-bg page-section overflow-hidden">
       <div className="page-container">
-        <h2 className="page-title mb-5">Популярное</h2>
+        <h2 className="page-title mb-10">Популярное</h2>
 
         <div className="mx-auto grid max-w-[1320px] gap-6 lg:grid-cols-[1.1fr_1fr]">
           {products[0] && (

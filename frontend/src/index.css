@@ -299,7 +299,7 @@ img {
     max-width: 100%;
     overflow: hidden;
     text-align: center;
-    font-size: clamp(30px, 10vw, 52px) !important;
+    font-size: clamp(25px, 5vw, 47px) !important;
     line-height: 1.05 !important;
     letter-spacing: -0.05em !important;
     word-break: break-word;
