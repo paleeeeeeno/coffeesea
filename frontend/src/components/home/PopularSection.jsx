@@ -12,81 +12,71 @@ function getPrice(product) {
     0;
 
   const value = Number(String(raw).replace(",", ".").replace(/[^\d.]/g, ""));
-
   return Number.isFinite(value) ? value : 0;
 }
 
-function PopularCard({ product, size = "small", onOpen }) {
+function PopularCard({ product, variant = "small", onOpen }) {
   const image = getProductImage(product);
   const price = getPrice(product);
 
-  const isBig = size === "big";
-  const isWide = size === "wide";
+  const isBig = variant === "big";
+  const isWide = variant === "wide";
 
   return (
     <article
-      className={`glass-card glow-hover flex flex-col overflow-hidden rounded-[28px] border border-white/15 ${
-        isBig
-          ? "lg:h-[620px]"
-          : isWide
-            ? "lg:h-[300px]"
-            : "lg:h-[314px]"
+      className={`popular-card group relative overflow-hidden rounded-[28px] border border-white/20 bg-[#07101f] shadow-2xl ${
+        isBig ? "min-h-[520px]" : isWide ? "min-h-[260px]" : "min-h-[260px]"
       }`}
     >
-    
+      <img
+        src={image}
+        alt={product?.name || "Товар"}
+        loading="lazy"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/95 via-[#07101f]/55 to-black/20" />
+
       <button
         type="button"
         onClick={() => onOpen(product)}
-        className="block w-full overflow-hidden"
+        className="relative z-10 flex h-full w-full flex-col items-start justify-end p-6 text-left md:p-7"
       >
-        <img
-          src={image}
-          alt={product?.name || "Товар"}
-          loading="lazy"
-          decoding="async"
-          className={`image-hover w-full object-cover ${
-          isBig
-            ? "h-[340px] md:h-[380px]"
-            : isWide
-              ? "h-[170px] md:h-[180px]"
-              : "h-[170px] md:h-[190px]"
-        }`}
-        />
-      </button>
+        <span className="mb-4 text-xs uppercase tracking-[0.45em] text-[#d6a866]">
+          Coffee Sea
+        </span>
 
-      <div className={`flex flex-1 flex-col ${isBig ? "p-7" : "p-5"}`}>
         <h3
-          className={`section-title leading-[1] text-white ${
-            isBig ? "text-[40px]" : isWide ? "text-[34px]" : "text-[28px]"
+          className={`section-title text-white ${
+            isBig ? "text-[54px]" : isWide ? "text-[46px]" : "text-[34px]"
           }`}
         >
           {product?.name}
         </h3>
 
         {product?.description && (
-          <p className="mt-3 line-clamp-3 text-sm uppercase leading-6 text-white/65 md:text-base">
+          <p
+            className={`mt-3 max-w-md uppercase text-white/75 ${
+              isBig ? "text-base leading-7" : "text-sm leading-6"
+            }`}
+          >
             {product.description}
           </p>
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-4 pt-6">
-          <span
-            className={`font-black text-white ${
-              isBig ? "text-[38px]" : "text-[30px]"
-            }`}
-          >
-            {price.toLocaleString("ru-RU")}₽
-          </span>
+        <p
+          className={`mt-5 font-black text-white ${
+            isBig ? "text-[42px]" : "text-[32px]"
+          }`}
+        >
+          {price.toLocaleString("ru-RU")}₽
+        </p>
 
-          <button
-            type="button"
-            onClick={() => onOpen(product)}
-            className="shrink-0 border border-white/80 px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-white hover:text-[#07101f]"
-          >
-            Выбрать
-          </button>
-        </div>
-      </div>
+        <span className="mt-4 inline-flex border border-white/80 px-8 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-white transition group-hover:bg-white group-hover:text-[#07101f]">
+          В корзину
+        </span>
+      </button>
     </article>
   );
 }
@@ -125,11 +115,11 @@ export default function PopularSection() {
       <div className="page-container">
         <h2 className="page-title mb-10">Популярное</h2>
 
-        <div className="mx-auto grid max-w-[1280px] gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="mx-auto grid max-w-[1320px] gap-6 lg:grid-cols-[1.1fr_1fr]">
           {products[0] && (
             <PopularCard
               product={products[0]}
-              size="big"
+              variant="big"
               onOpen={setSelectedProduct}
             />
           )}
@@ -138,7 +128,7 @@ export default function PopularSection() {
             {products[1] && (
               <PopularCard
                 product={products[1]}
-                size="wide"
+                variant="wide"
                 onOpen={setSelectedProduct}
               />
             )}
@@ -148,6 +138,7 @@ export default function PopularSection() {
                 <PopularCard
                   key={product.id || product.name}
                   product={product}
+                  variant="small"
                   onOpen={setSelectedProduct}
                 />
               ))}

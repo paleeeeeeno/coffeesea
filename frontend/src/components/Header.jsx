@@ -6,7 +6,7 @@ const navLinks = [
   { to: "/menu", label: "Меню" },
   { to: "/about", label: "О нас" },
   { to: "/cafes", label: "Кофейни" },
-  { to: "/contacts", label: "Контакты" },
+  { to: "/contacts", label: "Связь с нами" },
 ];
 
 export default function Header() {
