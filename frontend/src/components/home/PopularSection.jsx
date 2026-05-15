@@ -1,144 +1,152 @@
 import { useEffect, useState } from "react";
-
 import { api } from "../../api/client";
-
 import ProductModal from "../menu/ProductModal";
-
 import { getProductImage } from "../../utils/getProductImage";
+
+function getPrice(product) {
+  const raw =
+    product?.base_price ??
+    product?.basePrice ??
+    product?.price ??
+    product?.final_price ??
+    0;
+
+  const value = Number(String(raw).replace(",", ".").replace(/[^\d.]/g, ""));
+
+  return Number.isFinite(value) ? value : 0;
+}
+
+function PopularCard({ product, size = "small", onOpen }) {
+  const image = getProductImage(product);
+  const price = getPrice(product);
+
+  const isBig = size === "big";
+  const isWide = size === "wide";
+
+  return (
+    <article
+      className={`
+        popular-card glass-card glow-hover flex h-full flex-col overflow-hidden rounded-[24px] border border-white/15
+        ${isBig ? "min-h-[560px]" : "min-h-[360px]"}
+      `}
+    >
+      <button
+        type="button"
+        onClick={() => onOpen(product)}
+        className="block w-full overflow-hidden"
+      >
+        <img
+          src={image}
+          alt={product?.name || "Товар"}
+          loading="lazy"
+          decoding="async"
+          className={`
+            image-hover w-full object-cover
+            ${isBig ? "h-[260px]" : isWide ? "h-[180px]" : "h-[170px]"}
+          `}
+        />
+      </button>
+
+      <div className={`flex flex-1 flex-col ${isBig ? "p-7" : "p-5"}`}>
+        <h3
+          className={`
+            section-title leading-[0.95] text-white
+            ${isBig ? "text-[42px]" : isWide ? "text-[34px]" : "text-[28px]"}
+          `}
+        >
+          {product?.name}
+        </h3>
+
+        {product?.description && (
+          <p className="mt-4 line-clamp-3 text-sm uppercase leading-6 text-white/65 md:text-base">
+            {product.description}
+          </p>
+        )}
+
+        <div className="mt-auto flex items-center justify-between gap-4 pt-7">
+          <span
+            className={`
+              font-black text-white
+              ${isBig ? "text-[40px]" : "text-[30px]"}
+            `}
+          >
+            {price.toLocaleString("ru-RU")}₽
+          </span>
+
+          <button
+            type="button"
+            onClick={() => onOpen(product)}
+            className="shrink-0 border border-white/80 px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-white hover:text-[#07101f]"
+          >
+            Выбрать
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 export default function PopularSection() {
   const [products, setProducts] = useState([]);
-
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
+    let ignore = false;
+
     api
       .get("/products/popular/")
-      .then((res) => setProducts(res.data.slice(0, 4)))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        if (ignore) return;
+
+        const data = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data?.results)
+            ? res.data.results
+            : [];
+
+        setProducts(data.slice(0, 4));
+      })
+      .catch((err) => console.log("Ошибка загрузки популярных:", err));
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
+  if (products.length === 0) return null;
+
   return (
-    <section className="wave-bg page-section">
+    <section className="wave-bg page-section overflow-hidden">
       <div className="page-container">
-        <h2 className="page-title fade-up">Популярное</h2>
+        <h2 className="page-title mb-10">
+          Популярное
+        </h2>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-          {/* Большая карточка */}
+        <div className="mx-auto grid max-w-[1120px] gap-6 lg:grid-cols-[1fr_1fr]">
           {products[0] && (
-            <article className="glass-card glow-hover overflow-hidden rounded-[32px]">
-              <div className="overflow-hidden">
-                <img
-                  src={getProductImage(products[0])}
-                  alt={products[0].name}
-                  loading="lazy"
-                  className="image-hover h-[420px] w-full object-cover"
-                />
-              </div>
-
-              <div className="p-7">
-                <h3 className="section-title text-5xl text-white">
-                  {products[0].name}
-                </h3>
-
-                <p className="mt-4 text-lg uppercase leading-8 text-white/70">
-                  {products[0].description}
-                </p>
-
-                <div className="mt-8 flex items-center justify-between">
-                  <span className="text-5xl font-black text-white">
-                    {products[0].base_price}₽
-                  </span>
-
-                  <button
-                    onClick={() => setSelectedProduct(products[0])}
-                    className="border border-white px-8 py-4 uppercase tracking-[0.15em] text-white transition hover:bg-white hover:text-[#07101f]"
-                  >
-                    Выбрать
-                  </button>
-                </div>
-              </div>
-            </article>
+            <PopularCard
+              product={products[0]}
+              size="big"
+              onOpen={setSelectedProduct}
+            />
           )}
 
-          {/* Правая колонка */}
           <div className="grid gap-6">
-            {/* Верхняя карточка */}
             {products[1] && (
-              <article className="glass-card glow-hover overflow-hidden rounded-[32px]">
-                <div className="overflow-hidden">
-                  <img
-                    src={getProductImage(products[1])}
-                    alt={products[1].name}
-                    loading="lazy"
-                    className="image-hover h-[220px] w-full object-cover"
-                  />
-                </div>
-
-                <div className="p-6">
-                  <h3 className="section-title text-4xl text-white">
-                    {products[1].name}
-                  </h3>
-
-                  <p className="mt-3 uppercase leading-7 text-white/70">
-                    {products[1].description}
-                  </p>
-
-                  <div className="mt-6 flex items-center justify-between">
-                    <span className="text-4xl font-black text-white">
-                      {products[1].base_price}₽
-                    </span>
-
-                    <button
-                      onClick={() => setSelectedProduct(products[1])}
-                      className="border border-white px-6 py-3 uppercase text-white transition hover:bg-white hover:text-[#07101f]"
-                    >
-                      Выбрать
-                    </button>
-                  </div>
-                </div>
-              </article>
+              <PopularCard
+                product={products[1]}
+                size="wide"
+                onOpen={setSelectedProduct}
+              />
             )}
 
-            {/* Нижние карточки */}
             <div className="grid gap-6 md:grid-cols-2">
               {products.slice(2, 4).map((product) => (
-                <article
-                  key={product.id}
-                  className="glass-card glow-hover overflow-hidden rounded-[32px]"
-                >
-                  <div className="overflow-hidden">
-                    <img
-                      src={getProductImage(product)}
-                      alt={product.name}
-                      loading="lazy"
-                      className="image-hover h-[180px] w-full object-cover"
-                    />
-                  </div>
-
-                  <div className="p-5">
-                    <h3 className="section-title text-3xl text-white">
-                      {product.name}
-                    </h3>
-
-                    <p className="mt-3 uppercase leading-6 text-white/70">
-                      {product.description}
-                    </p>
-
-                    <div className="mt-6 flex items-center justify-between">
-                      <span className="text-3xl font-black text-white">
-                        {product.base_price}₽
-                      </span>
-
-                      <button
-                        onClick={() => setSelectedProduct(product)}
-                        className="border border-white px-5 py-3 uppercase text-white transition hover:bg-white hover:text-[#07101f]"
-                      >
-                        Выбрать
-                      </button>
-                    </div>
-                  </div>
-                </article>
+                <PopularCard
+                  key={product.id || product.name}
+                  product={product}
+                  onOpen={setSelectedProduct}
+                />
               ))}
             </div>
           </div>

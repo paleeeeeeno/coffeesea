@@ -1,12 +1,21 @@
 const productImages = {
-  Капучино: "/images/products/cappuccino.jpg",
-  Латте: "/images/products/latte.jpg",
-  Круассан: "/images/products/croissant.jpg",
-  Мильфей: "/images/products/milfey.jpg",
-  Американо: "/images/products/americano.jpg",
-  Раф: "/images/products/raf.jpg",
+  капучино: "/images/products/cappuccino.jpg",
+  латте: "/images/products/latte.jpg",
+  круассан: "/images/products/croissant.jpg",
+  мильфей: "/images/products/milfey.jpg",
+  американо: "/images/products/americano.jpg",
+  раф: "/images/products/raf.jpg",
 };
 
+function normalizeName(name = "") {
+  return String(name).trim().toLowerCase();
+}
+
 export function getProductImage(product) {
-  return productImages[product?.name] || "/images/products/placeholder.jpg";
+  const name = normalizeName(product?.name);
+
+  return (
+    productImages[name] ||
+    "/images/products/placeholder.jpg"
+  );
 }

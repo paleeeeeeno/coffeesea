@@ -10,8 +10,14 @@ export default function Cafes() {
     api
       .get("/cafes/")
       .then((res) => {
-        setCafes(res.data);
-        setSelectedCafe(res.data[0]);
+        const data = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data?.results)
+            ? res.data.results
+            : [];
+
+        setCafes(data);
+        setSelectedCafe(data[0] || null);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -28,10 +34,8 @@ export default function Cafes() {
         description="Адреса кофеен Coffee Sea во Владивостоке, телефоны, график работы и карта."
       />
 
-      <section className="wave-bg relative min-h-screen overflow-hidden px-6 py-20">
-        <div className="absolute right-[-120px] top-32 h-[300px] w-[300px] animate-pulse rounded-full bg-white/10 blur-3xl" />
-
-        <div className="relative z-10 mx-auto max-w-7xl">
+      <section className="wave-bg page-section overflow-hidden">
+        <div className="page-container">
           <h1 className="page-title cafes-title">
             Кофейни
           </h1>
@@ -41,35 +45,46 @@ export default function Cafes() {
               {cafes.map((cafe) => (
                 <button
                   key={cafe.id}
+                  type="button"
                   onClick={() => setSelectedCafe(cafe)}
-                  className={`p-6 text-left transition ${
+                  className={`rounded-[28px] p-5 text-left transition md:p-6 ${
                     selectedCafe?.id === cafe.id
                       ? "border border-white bg-white text-[#1d2946]"
                       : "glass-card glow-hover text-white"
                   }`}
                 >
-                  <h2 className="text-3xl font-black uppercase">
+                  <h2 className="text-2xl font-black uppercase leading-tight md:text-3xl">
                     {cafe.title}
                   </h2>
 
-                  <p className="mt-3 uppercase">Адрес: {cafe.address}</p>
-                  <p className="uppercase">Телефон: {cafe.phone}</p>
-                  <p className="uppercase">График: {cafe.work_time}</p>
+                  <div className="mt-4 space-y-2">
+                    <p className="text-sm uppercase leading-6 md:text-base">
+                      Адрес: {cafe.address}
+                    </p>
+
+                    <p className="text-sm uppercase leading-6 md:text-base">
+                      Телефон: {cafe.phone}
+                    </p>
+
+                    <p className="text-sm uppercase leading-6 md:text-base">
+                      График: {cafe.work_time}
+                    </p>
+                  </div>
                 </button>
               ))}
             </div>
 
-            <div className="glass-card glow-hover overflow-hidden p-4">
+            <div className="glass-card glow-hover overflow-hidden rounded-[28px] p-3 md:p-4">
               {mapUrl ? (
                 <iframe
                   title="Карта кофейни"
                   src={mapUrl}
-                  className="h-[500px] w-full"
+                  className="h-[320px] w-full rounded-[22px] md:h-[500px]"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               ) : (
-                <div className="flex h-[500px] items-center justify-center text-center uppercase text-white/70">
+                <div className="flex h-[320px] items-center justify-center text-center text-sm uppercase text-white/70 md:h-[500px] md:text-base">
                   У кофейни не указаны координаты
                 </div>
               )}

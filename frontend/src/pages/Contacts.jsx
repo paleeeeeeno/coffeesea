@@ -1,108 +1,80 @@
-import { useState } from "react";
-import Seo from "../components/Seo";
-import { api } from "../api/client";
+import { Send, Mail, Paperclip, Camera } from "lucide-react";
 
 export default function Contacts() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const [error, setError] = useState("");
-
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError("");
-
-    try {
-      await api.post("/feedback/", form);
-
-      alert("Сообщение отправлено");
-
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
-    } catch (err) {
-      const data = err.response?.data;
-
-      if (data?.email) setError("Введите корректный email.");
-      else if (data?.name) setError("Введите имя.");
-      else if (data?.message) setError("Введите сообщение.");
-      else setError("Ошибка отправки сообщения.");
-    }
-  }
-
   return (
-    <>
-      <Seo
-        title="Контакты — Coffee Sea"
-        description="Свяжитесь с Coffee Sea: обратная связь, телефон и почта."
-      />
+    <section className="wave-bg page-section flex items-center justify-center">
+      <div className="page-container flex flex-col items-center gap-10">
+        <h1 className="page-title contacts-title fade-up">
+          Обратная связь
+        </h1>
 
-      <section className="wave-bg min-h-screen px-6 py-20">
-        <div className="mx-auto max-w-4xl">
-          <h1 className="page-title contacts-title">
-            Контакты
-          </h1>
+        <div className="glass-card w-full max-w-4xl rounded-[28px] p-5 md:p-10">
+          <p className="mb-8 max-w-2xl text-sm leading-7 text-white/70 md:text-base">
+            Мы рады вашим сообщениям! Напишите нам, и мы постараемся ответить
+            как можно скорее.
+          </p>
 
-          <form onSubmit={handleSubmit} className="glass-card glow-hover mt-12 grid gap-5 p-8">
-            {error && (
-              <p className="bg-red-500/20 p-3 text-center uppercase">
-                {error}
-              </p>
-            )}
-
+          <form className="flex flex-col gap-5">
             <input
-              name="name"
+              type="text"
               placeholder="Имя"
-              value={form.name}
-              onChange={handleChange}
-              className="border border-white/20 bg-transparent px-4 py-3 outline-none"
-              required
+              className="form-field rounded-xl px-5 py-4"
             />
 
             <input
-              name="email"
               type="email"
               placeholder="Email"
-              value={form.email}
-              onChange={handleChange}
-              className="border border-white/20 bg-transparent px-4 py-3 outline-none"
-              required
+              className="form-field rounded-xl px-5 py-4"
             />
 
             <input
-              name="phone"
+              type="tel"
               placeholder="Телефон"
-              value={form.phone}
-              onChange={handleChange}
-              className="border border-white/20 bg-transparent px-4 py-3 outline-none"
+              className="form-field rounded-xl px-5 py-4"
             />
 
             <textarea
-              name="message"
               placeholder="Сообщение"
-              value={form.message}
-              onChange={handleChange}
-              className="min-h-40 border border-white/20 bg-transparent px-4 py-3 outline-none"
-              required
+              rows={6}
+              className="form-field resize-none rounded-xl px-5 py-4"
             />
 
-            <button className="border border-white px-6 py-3 uppercase hover:bg-white hover:text-[#1d2946]">
-              Отправить
+            <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
+              <label className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-dashed border-white/30 px-5 py-4 text-white/70 transition hover:border-white/60 hover:text-white md:w-auto">
+                <Paperclip size={20} />
+                <span>Прикрепить файл</span>
+                <input type="file" className="hidden" />
+              </label>
+
+              <p className="text-sm leading-6 text-white/50">
+                Вы можете прикрепить файл до 5 МБ.
+              </p>
+            </div>
+
+            <button
+              type="submit"
+              className="mt-2 flex w-full items-center justify-center gap-3 rounded-xl border border-white/30 bg-transparent px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-white transition duration-300 hover:border-white hover:bg-white hover:text-[#07101f]"
+            >
+              <Send size={18} />
+              Отправить сообщение
             </button>
           </form>
         </div>
-      </section>
-    </>
+
+        <div className="flex items-center gap-6 text-white/80">
+          <a href="#" className="transition hover:scale-110 hover:text-white">
+            <Camera size={24} />
+          </a>
+
+          <a href="#" className="transition hover:scale-110 hover:text-white">
+            <Send size={24} />
+          </a>
+
+          <a href="#" className="transition hover:scale-110 hover:text-white">
+            <Mail size={24} />
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }

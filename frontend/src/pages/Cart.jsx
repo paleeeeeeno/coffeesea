@@ -1,141 +1,236 @@
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import Seo from "../components/Seo";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { getProductImage } from "../utils/getProductImage";
 
-export default function Cart() {
-  const [cart, setCart] = useState([]);
-
-  useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
-  }, []);
-
-  function updateCart(newCart) {
-    setCart(newCart);
-    localStorage.setItem("cart", JSON.stringify(newCart));
+function readCart() {
+  try {
+    return JSON.parse(localStorage.getItem("cart") || "[]");
+  } catch {
+    return [];
   }
+}
 
-  function increase(id) {
-    updateCart(
-      cart.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  }
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  window.dispatchEvent(new Event("cart-updated"));
+}
 
-  function decrease(id) {
-    updateCart(
-      cart.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-          : item
-      )
-    );
-  }
-
-  function removeItem(id) {
-    updateCart(cart.filter((item) => item.id !== id));
-  }
-
-  const total = cart.reduce(
-    (sum, item) => sum + Number(item.price) * item.quantity,
-    0
-  );
+const CartItem = memo(function CartItem({
+  item,
+  onIncrease,
+  onDecrease,
+  onRemove,
+}) {
+  const price = Number(item.price || 0);
+  const quantity = Number(item.quantity || 1);
 
   return (
-    <>
-      <Seo title="Корзина — Coffee Sea" description="Корзина заказа Coffee Sea." />
+    <article className="glass-card responsive-card grid gap-5 rounded-[28px] p-5 sm:grid-cols-[130px_1fr_auto] sm:items-center">
+      <img
+        src={getProductImage(item)}
+        alt={item.name}
+        className="h-[150px] w-full rounded-[22px] object-cover sm:h-[130px] sm:w-[130px]"
+        loading="lazy"
+        decoding="async"
+        onError={(event) => {
+          event.currentTarget.src = "/images/products/placeholder.jpg";
+        }}
+      />
 
-      <section className="wave-bg min-h-screen px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <h1 className="page-title cart-title">
-            Корзина
-          </h1>
-          {cart.length === 0 ? (
-            <div className="glass-card glow-hover mx-auto mt-12 max-w-xl p-8 text-center">
-              <p className="text-xl uppercase text-white/70">
-                Корзина пока пустая
-              </p>
+      <div className="min-w-0">
+        <h3 className="text-2xl font-semibold text-white">{item.name}</h3>
 
-              <Link
-                to="/menu"
-                className="mt-8 inline-block border border-white px-6 py-3 uppercase hover:bg-white hover:text-[#1d2946]"
-              >
-                Перейти в меню
-              </Link>
-            </div>
-          ) : (
-            <>
-              <div className="mt-14 grid gap-6">
-                {cart.map((item) => {
-                  const imageUrl = item.image
-                    ? `http://127.0.0.1:8000${item.image}`
-                    : "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085";
+        {item.size?.name && (
+          <p className="mt-2 text-sm text-white/60">Размер: {item.size.name}</p>
+        )}
 
-                  return (
-                    <article
-                      key={item.id}
-                      className="glass-card glow-hover grid gap-5 p-4 md:grid-cols-[180px_1fr_auto]"
-                    >
-                      <img
-                        src={imageUrl}
-                        alt={item.name}
-                        className="image-hover h-40 w-full object-cover"
-                      />
+        {item.modifiers?.length > 0 && (
+          <p className="mt-1 text-sm leading-6 text-white/60">
+            Добавки: {item.modifiers.map((modifier) => modifier.name).join(", ")}
+          </p>
+        )}
 
-                      <div>
-                        <h2 className="text-2xl font-black uppercase">{item.name}</h2>
+        <p className="mt-3 text-lg font-semibold text-white">
+          {price.toLocaleString("ru-RU")} ₽
+        </p>
+      </div>
 
-                        {item.size && (
-                          <p className="mt-2 uppercase text-white/70">
-                            Размер: {item.size.name}
-                          </p>
-                        )}
+      <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => onDecrease(item.id)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 transition hover:border-white"
+            aria-label="Уменьшить количество"
+          >
+            <Minus size={18} />
+          </button>
 
-                        {item.modifiers?.length > 0 && (
-                          <p className="mt-2 uppercase text-white/70">
-                            Добавки: {item.modifiers.map((mod) => mod.name).join(", ")}
-                          </p>
-                        )}
+          <span className="min-w-8 text-center text-lg font-semibold">
+            {quantity}
+          </span>
 
-                        <p className="mt-4 text-xl font-black">{item.price}₽</p>
-                      </div>
+          <button
+            type="button"
+            onClick={() => onIncrease(item.id)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 transition hover:border-white"
+            aria-label="Увеличить количество"
+          >
+            <Plus size={18} />
+          </button>
+        </div>
 
-                      <div className="flex items-center gap-4 md:flex-col md:items-end md:justify-between">
-                        <div className="flex items-center gap-3">
-                          <button onClick={() => decrease(item.id)} className="flex h-9 w-9 items-center justify-center border border-white">
-                            -
-                          </button>
+        <button
+          type="button"
+          onClick={() => onRemove(item.id)}
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/75 transition hover:border-white hover:text-white"
+          aria-label="Удалить товар"
+        >
+          <Trash2 size={19} />
+        </button>
+      </div>
+    </article>
+  );
+});
 
-                          <span className="text-xl font-black">{item.quantity}</span>
+export default function Cart() {
+  const [cart, setCart] = useState(() => readCart());
 
-                          <button onClick={() => increase(item.id)} className="flex h-9 w-9 items-center justify-center border border-white">
-                            +
-                          </button>
-                        </div>
+  useEffect(() => {
+    const syncCart = () => setCart(readCart());
 
-                        <button onClick={() => removeItem(item.id)} className="text-sm uppercase text-white/60 hover:text-white">
-                          Удалить
-                        </button>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
+    window.addEventListener("storage", syncCart);
+    window.addEventListener("cart-updated", syncCart);
 
-              <div className="glass-card glow-hover mt-10 flex flex-col items-end gap-5 p-6">
-                <p className="text-3xl font-black uppercase">Итого: {total}₽</p>
+    return () => {
+      window.removeEventListener("storage", syncCart);
+      window.removeEventListener("cart-updated", syncCart);
+    };
+  }, []);
 
-                <Link
-                  to="/checkout"
-                  className="border border-white px-8 py-4 uppercase hover:bg-white hover:text-[#1d2946]"
-                >
-                  Оформить заказ
-                </Link>
-              </div>
-            </>
-          )}
+  const updateCart = useCallback((updater) => {
+    setCart((current) => {
+      const nextCart = updater(current);
+      saveCart(nextCart);
+      return nextCart;
+    });
+  }, []);
+
+  const increase = useCallback(
+    (id) => {
+      updateCart((current) =>
+        current.map((item) =>
+          item.id === id
+            ? { ...item, quantity: Number(item.quantity || 1) + 1 }
+            : item
+        )
+      );
+    },
+    [updateCart]
+  );
+
+  const decrease = useCallback(
+    (id) => {
+      updateCart((current) =>
+        current.map((item) =>
+          item.id === id
+            ? { ...item, quantity: Math.max(1, Number(item.quantity || 1) - 1) }
+            : item
+        )
+      );
+    },
+    [updateCart]
+  );
+
+  const remove = useCallback(
+    (id) => {
+      updateCart((current) => current.filter((item) => item.id !== id));
+    },
+    [updateCart]
+  );
+
+  const clearCart = useCallback(() => {
+    updateCart(() => []);
+  }, [updateCart]);
+
+  const total = useMemo(
+    () =>
+      cart.reduce(
+        (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1),
+        0
+      ),
+    [cart]
+  );
+
+  if (cart.length === 0) {
+    return (
+      <section className="wave-bg page-section flex items-center justify-center">
+        <div className="page-container text-center">
+          <h1 className="page-title cart-title fade-up">Корзина</h1>
+
+          <div className="glass-card mx-auto mt-10 max-w-xl rounded-[28px] p-6 md:p-8">
+            <p className="text-base text-white/70 md:text-lg">
+              Ваша корзина пока пуста.
+            </p>
+
+            <Link
+              to="/menu"
+              className="mt-6 inline-flex rounded-full border border-white/30 px-7 py-4 text-sm font-semibold uppercase tracking-[0.18em] transition hover:border-white hover:bg-white hover:text-[#07101f]"
+            >
+              Перейти в меню
+            </Link>
+          </div>
         </div>
       </section>
-    </>
+    );
+  }
+
+  return (
+    <section className="wave-bg page-section">
+      <div className="page-container">
+        <h1 className="page-title cart-title fade-up">Корзина</h1>
+
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_380px]">
+          <div className="flex flex-col gap-5">
+            {cart.map((item) => (
+              <CartItem
+                key={item.id}
+                item={item}
+                onIncrease={increase}
+                onDecrease={decrease}
+                onRemove={remove}
+              />
+            ))}
+          </div>
+
+          <aside className="glass-card h-fit rounded-[28px] p-6 lg:sticky lg:top-28">
+            <h2 className="text-2xl font-semibold">Итого</h2>
+
+            <div className="mt-5 flex items-center justify-between border-t border-white/15 pt-5">
+              <span className="text-white/65">Сумма заказа</span>
+              <span className="text-2xl font-bold">
+                {total.toLocaleString("ru-RU")} ₽
+              </span>
+            </div>
+
+            <Link
+              to="/checkout"
+              className="mt-5 flex w-full items-center justify-center rounded-2xl border border-white/25 px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] transition hover:border-white"
+            >
+              Оформить
+            </Link>
+
+            <button
+              type="button"
+              onClick={clearCart}
+              className="mt-3 flex w-full items-center justify-center rounded-2xl border border-white/25 px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] transition hover:border-white"
+            >
+              Очистить корзину
+            </button>
+          </aside>
+        </div>
+      </div>
+    </section>
   );
 }

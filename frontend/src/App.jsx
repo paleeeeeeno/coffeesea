@@ -1,20 +1,20 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 import ProtectedRoute from "./router/ProtectedRoute";
 
-import Home from "./pages/Home";
-import Menu from "./pages/Menu";
 import About from "./pages/About";
 import Cafes from "./pages/Cafes";
-import Contacts from "./pages/Contacts";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Contacts from "./pages/Contacts";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Menu from "./pages/Menu";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 
 export default function App() {
   return (
@@ -22,7 +22,7 @@ export default function App() {
       <div className="min-h-screen overflow-x-hidden bg-[#1d2946] text-[#f8f8f3]">
         <Header />
 
-        <main className="pt-[72px]">
+        <main className="pt-[73px]">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />

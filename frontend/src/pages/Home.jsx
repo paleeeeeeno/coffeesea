@@ -11,11 +11,11 @@ export default function Home() {
         description="Coffee Sea — кофейня во Владивостоке рядом с морем, авторский кофе, десерты и доставка."
       />
 
-      <div className="bg-[#1d2946] text-[#f8f8f3]">
+      <main className="overflow-x-hidden bg-[#1d2946] text-[#f8f8f3]">
         <HeroSection />
         <AboutSection />
         <PopularSection />
-      </div>
+      </main>
     </>
   );
 }

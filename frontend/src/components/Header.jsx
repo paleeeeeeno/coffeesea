@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, User, Menu, X } from "lucide-react";
+import { Menu, ShoppingCart, User, X } from "lucide-react";
+
+const navLinks = [
+  { to: "/menu", label: "Меню" },
+  { to: "/about", label: "О нас" },
+  { to: "/cafes", label: "Кофейни" },
+  { to: "/contacts", label: "Контакты" },
+];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   function closeMenu() {
     setIsOpen(false);
@@ -11,93 +26,104 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed left-0 top-0 z-[1000] w-full border-b border-white/20 bg-[#07101f]/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <Link to="/" onClick={closeMenu}>
+      <header className="site-header">
+        <div className="site-header__inner">
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className="site-header__logo"
+            aria-label="Coffee Sea — на главную"
+          >
             <img
               src="/images/logo.webp"
               alt="Coffee Sea"
-              className="h-10 w-auto scale-200 object-contain"
+              className="site-header__logo-img"
             />
           </Link>
 
-          <nav className="hidden items-center gap-10 uppercase tracking-[6px] md:flex">
-            <Link className="hover:text-white/70" to="/menu">
-              Меню
-            </Link>
-            <Link className="hover:text-white/70" to="/about">
-              О нас
-            </Link>
-            <Link className="hover:text-white/70" to="/cafes">
-              Кофейни
-            </Link>
-            <Link className="hover:text-white/70" to="/contacts">
-              Контакты
-            </Link>
+          <nav className="site-header__nav" aria-label="Основная навигация">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="site-header__nav-link"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <Link to="/cart" className="hover:text-white/70">
-              <ShoppingCart size={34} strokeWidth={2.3} />
+          <div className="site-header__actions">
+            <Link
+              to="/cart"
+              onClick={closeMenu}
+              className="site-header__icon-link"
+              aria-label="Корзина"
+            >
+              <ShoppingCart className="site-header__icon" strokeWidth={2.2} />
             </Link>
 
-            <Link to="/profile" className="hover:text-white/70">
-              <User size={34} strokeWidth={2.3} />
+            <Link
+              to="/profile"
+              onClick={closeMenu}
+              className="site-header__icon-link"
+              aria-label="Профиль"
+            >
+              <User className="site-header__icon" strokeWidth={2.2} />
             </Link>
 
-            <button onClick={() => setIsOpen(true)} className="md:hidden">
-              <Menu size={48} strokeWidth={2.3} />
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="site-header__burger"
+              aria-label="Открыть меню"
+            >
+              <Menu className="site-header__icon" strokeWidth={2.2} />
             </button>
           </div>
         </div>
       </header>
 
       {isOpen && (
-        <div
+        <button
+          type="button"
           onClick={closeMenu}
           className="fixed inset-0 z-[999998] bg-black/70 backdrop-blur-sm md:hidden"
+          aria-label="Закрыть меню"
         />
       )}
 
-      <div
-        className={`
-          fixed right-0 top-0 z-[999999]
-          h-[100dvh] w-[300px]
-          border-l border-white/10
-          bg-[#07101f]
-          p-8
-          transition-transform duration-300
-          md:hidden
-          ${isOpen ? "translate-x-0" : "translate-x-full"}
-        `}
+      <aside
+        className={`fixed right-0 top-0 z-[999999] h-[100dvh] w-[min(320px,86vw)] border-l border-white/10 bg-[#07101f] p-7 transition-transform duration-300 md:hidden ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div className="flex justify-end">
-          <button onClick={closeMenu}>
-            <X size={40} />
+          <button
+            type="button"
+            onClick={closeMenu}
+            className="flex h-11 w-11 items-center justify-center"
+            aria-label="Закрыть меню"
+          >
+            <X className="site-header__icon" strokeWidth={2.2} />
           </button>
         </div>
 
-        <nav className="mt-16 flex flex-col gap-8 text-xl uppercase tracking-[4px]">
-          <Link onClick={closeMenu} to="/menu">
-            Меню
-          </Link>
-          <Link onClick={closeMenu} to="/about">
-            О нас
-          </Link>
-          <Link onClick={closeMenu} to="/cafes">
-            Кофейни
-          </Link>
-          <Link onClick={closeMenu} to="/contacts">
-            Контакты
-          </Link>
-          <Link onClick={closeMenu} to="/profile">
-            Профиль
-          </Link>
-          <Link onClick={closeMenu} to="/cart">
-            Корзина
-          </Link>
+        <nav className="mt-14 flex flex-col gap-7 text-xl uppercase tracking-[0.2em]">
+          {[...navLinks, { to: "/profile", label: "Профиль" }, { to: "/cart", label: "Корзина" }].map(
+            (link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={closeMenu}
+                className="transition hover:text-white/70"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </nav>
-      </div>
+      </aside>
     </>
   );
 }
