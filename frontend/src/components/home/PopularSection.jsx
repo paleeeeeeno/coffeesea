@@ -25,8 +25,8 @@ function PopularCard({ product, size = "small", onOpen }) {
 
   return (
     <article
-      className={`glass-card glow-hover flex h-full flex-col overflow-hidden rounded-[24px] border border-white/15 ${
-        isBig ? "min-h-[420px]" : "min-h-[340px]"
+      className={`glass-card glow-hover flex flex-col overflow-hidden rounded-[24px] border border-white/15 ${
+        isBig ? "min-h-0" : "min-h-[340px]"
       }`}
     >
       <button
@@ -39,9 +39,9 @@ function PopularCard({ product, size = "small", onOpen }) {
           alt={product?.name || "Товар"}
           loading="lazy"
           decoding="async"
-          className={`image-hover w-full ${
-            isWide ? "object-contain bg-[#07101f]" : "object-cover"
-          } ${isBig ? "h-[240px]" : isWide ? "h-[200px]" : "h-[170px]"}`}
+          className={`image-hover w-full object-cover ${
+            isBig ? "h-[240px]" : isWide ? "h-[170px]" : "h-[170px]"
+          }`}
         />
       </button>
 
@@ -116,7 +116,7 @@ export default function PopularSection() {
       <div className="page-container">
         <h2 className="page-title mb-10">Популярное</h2>
 
-        <div className="mx-auto grid max-w-[1120px] gap-6 lg:grid-cols-[1fr_1fr]">
+        <div className="mx-auto grid max-w-[1120px] items-start gap-6 lg:grid-cols-[1fr_1fr]">
           {products[0] && (
             <PopularCard
               product={products[0]}
