@@ -25,10 +25,9 @@ function PopularCard({ product, size = "small", onOpen }) {
 
   return (
     <article
-      className={`
-        popular-card glass-card glow-hover flex h-full flex-col overflow-hidden rounded-[24px] border border-white/15
-        ${isBig ? "min-h-[560px]" : "min-h-[360px]"}
-      `}
+      className={`glass-card glow-hover flex h-full flex-col overflow-hidden rounded-[24px] border border-white/15 ${
+        isBig ? "min-h-[420px]" : "min-h-[340px]"
+      }`}
     >
       <button
         type="button"
@@ -40,35 +39,32 @@ function PopularCard({ product, size = "small", onOpen }) {
           alt={product?.name || "Товар"}
           loading="lazy"
           decoding="async"
-          className={`
-            image-hover w-full object-cover
-            ${isBig ? "h-[260px]" : isWide ? "h-[180px]" : "h-[170px]"}
-          `}
+          className={`image-hover w-full ${
+            isWide ? "object-contain bg-[#07101f]" : "object-cover"
+          } ${isBig ? "h-[240px]" : isWide ? "h-[200px]" : "h-[170px]"}`}
         />
       </button>
 
-      <div className={`flex flex-1 flex-col ${isBig ? "p-7" : "p-5"}`}>
+      <div className={`flex flex-1 flex-col ${isBig ? "p-6" : "p-5"}`}>
         <h3
-          className={`
-            section-title leading-[0.95] text-white
-            ${isBig ? "text-[42px]" : isWide ? "text-[34px]" : "text-[28px]"}
-          `}
+          className={`section-title leading-[1] text-white ${
+            isBig ? "text-[40px]" : isWide ? "text-[34px]" : "text-[28px]"
+          }`}
         >
           {product?.name}
         </h3>
 
         {product?.description && (
-          <p className="mt-4 line-clamp-3 text-sm uppercase leading-6 text-white/65 md:text-base">
+          <p className="mt-3 line-clamp-3 text-sm uppercase leading-6 text-white/65 md:text-base">
             {product.description}
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-4 pt-7">
+        <div className="mt-6 flex items-center justify-between gap-4">
           <span
-            className={`
-              font-black text-white
-              ${isBig ? "text-[40px]" : "text-[30px]"}
-            `}
+            className={`font-black text-white ${
+              isBig ? "text-[38px]" : "text-[30px]"
+            }`}
           >
             {price.toLocaleString("ru-RU")}₽
           </span>
@@ -118,9 +114,7 @@ export default function PopularSection() {
   return (
     <section className="wave-bg page-section overflow-hidden">
       <div className="page-container">
-        <h2 className="page-title mb-10">
-          Популярное
-        </h2>
+        <h2 className="page-title mb-10">Популярное</h2>
 
         <div className="mx-auto grid max-w-[1120px] gap-6 lg:grid-cols-[1fr_1fr]">
           {products[0] && (
