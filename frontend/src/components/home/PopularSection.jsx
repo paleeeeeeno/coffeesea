@@ -25,8 +25,12 @@ function PopularCard({ product, size = "small", onOpen }) {
 
   return (
     <article
-      className={`glass-card glow-hover flex flex-col overflow-hidden rounded-[24px] border border-white/15 ${
-        isBig ? "min-h-0" : isWide ? "min-h-[295px]" : "min-h-[380px]"
+      className={`glass-card glow-hover flex flex-col overflow-hidden rounded-[28px] border border-white/15 ${
+        isBig
+          ? "lg:h-[620px]"
+          : isWide
+            ? "lg:h-[300px]"
+            : "lg:h-[314px]"
       }`}
     >
     
@@ -41,12 +45,16 @@ function PopularCard({ product, size = "small", onOpen }) {
           loading="lazy"
           decoding="async"
           className={`image-hover w-full object-cover ${
-            isBig ? "h-[240px]" : isWide ? "h-[170px]" : "h-[170px]"
-          }`}
+          isBig
+            ? "h-[340px] md:h-[380px]"
+            : isWide
+              ? "h-[170px] md:h-[180px]"
+              : "h-[170px] md:h-[190px]"
+        }`}
         />
       </button>
 
-      <div className={`flex flex-1 flex-col ${isBig ? "p-6" : "p-5"}`}>
+      <div className={`flex flex-1 flex-col ${isBig ? "p-7" : "p-5"}`}>
         <h3
           className={`section-title leading-[1] text-white ${
             isBig ? "text-[40px]" : isWide ? "text-[34px]" : "text-[28px]"
@@ -61,7 +69,7 @@ function PopularCard({ product, size = "small", onOpen }) {
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-4 pt-5">
+        <div className="mt-auto flex items-end justify-between gap-4 pt-6">
           <span
             className={`font-black text-white ${
               isBig ? "text-[38px]" : "text-[30px]"
@@ -117,7 +125,7 @@ export default function PopularSection() {
       <div className="page-container">
         <h2 className="page-title mb-10">Популярное</h2>
 
-        <div className="mx-auto grid max-w-[1120px] items-start gap-6 lg:grid-cols-[1fr_1fr]">
+        <div className="mx-auto grid max-w-[1280px] gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           {products[0] && (
             <PopularCard
               product={products[0]}

@@ -28,7 +28,7 @@ export default function Footer() {
             <Link to="/about">О нас</Link>
             <Link to="/menu">Меню</Link>
             <Link to="/cafes">Кофейни</Link>
-            <Link to="/contacts">Контакты</Link>
+            <Link to="/contacts">Связь с нами</Link>
             <Link to="/cart">Корзина</Link>
           </div>
         </div>
