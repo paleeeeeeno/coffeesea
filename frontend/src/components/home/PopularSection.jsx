@@ -26,9 +26,10 @@ function PopularCard({ product, size = "small", onOpen }) {
   return (
     <article
       className={`glass-card glow-hover flex flex-col overflow-hidden rounded-[24px] border border-white/15 ${
-        isBig ? "min-h-0" : "min-h-[340px]"
+        isBig ? "min-h-0" : isWide ? "min-h-[295px]" : "min-h-[380px]"
       }`}
     >
+    
       <button
         type="button"
         onClick={() => onOpen(product)}
@@ -60,7 +61,7 @@ function PopularCard({ product, size = "small", onOpen }) {
           </p>
         )}
 
-        <div className="mt-6 flex items-center justify-between gap-4">
+        <div className="mt-auto flex items-center justify-between gap-4 pt-5">
           <span
             className={`font-black text-white ${
               isBig ? "text-[38px]" : "text-[30px]"
