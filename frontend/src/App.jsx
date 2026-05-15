@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import ProtectedRoute from "./router/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 import About from "./pages/About";
 import Cafes from "./pages/Cafes";
@@ -16,9 +17,11 @@ import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 
+
 export default function App() {
   return (
     <BrowserRouter>
+     <ScrollToTop />
       <div className="min-h-screen overflow-x-hidden bg-[#1d2946] text-[#f8f8f3]">
         <Header />
 
