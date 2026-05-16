@@ -45,30 +45,31 @@ function ProductModal({ product, onClose }) {
   }, [product, onClose]);
 
   const finalPrice = useMemo(() => {
-    const basePrice = getProductPrice(product);
+  const basePrice = getProductPrice(product);
 
-    const sizePrice = parsePrice(
-      selectedSize?.extra_price ||
-        selectedSize?.extraPrice ||
-        selectedSize?.price_add ||
-        selectedSize?.priceAdd
-    );
+  const selectedSizePrice = parsePrice(
+    selectedSize?.price ??
+      selectedSize?.base_price ??
+      selectedSize?.basePrice
+  );
 
-    const modifiersPrice = modifiers.reduce(
-      (sum, modifier) =>
-        sum +
-        parsePrice(
-          modifier?.price ||
-            modifier?.extra_price ||
-            modifier?.extraPrice ||
-            modifier?.price_add ||
-            modifier?.priceAdd
-        ),
-      0
-    );
+  const sizePrice = selectedSizePrice > 0 ? selectedSizePrice : basePrice;
 
-    return basePrice + sizePrice + modifiersPrice;
-  }, [product, selectedSize, modifiers]);
+  const modifiersPrice = modifiers.reduce(
+    (sum, modifier) =>
+      sum +
+      parsePrice(
+        modifier?.price ||
+          modifier?.extra_price ||
+          modifier?.extraPrice ||
+          modifier?.price_add ||
+          modifier?.priceAdd
+      ),
+    0
+  );
+
+  return sizePrice + modifiersPrice;
+}, [product, selectedSize, modifiers]);
 
   if (!product) return null;
 

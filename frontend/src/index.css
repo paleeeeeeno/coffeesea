@@ -440,3 +440,19 @@ img {
   }
 }
 
+.glow-hover,
+.image-hover,
+.menu-card,
+.popular-card,
+.glass-card {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@media (hover: none) {
+  .glow-hover:hover,
+  .image-hover:hover {
+    transform: none !important;
+    filter: none !important;
+  }
+}
