@@ -14,24 +14,24 @@ export default function Register() {
 
   const [error, setError] = useState("");
 
-  function handleChange(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  }
-
   async function handleSubmit(e) {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      await api.post("/auth/register/", form);
-      navigate("/login");
-    } catch {
-      setError("Ошибка регистрации");
-    }
+  if (!agree) {
+    setError(
+      "Необходимо дать согласие на обработку персональных данных"
+    );
+    return;
   }
+
+  try {
+    await api.post("/auth/register/", form);
+    navigate("/login");
+  } catch {
+    setError("Ошибка регистрации");
+  }
+}
 
   return (
     <>
@@ -94,11 +94,29 @@ export default function Register() {
               className="h-[62px] rounded-[18px] border border-white/10 bg-[#08101f]/70 px-6 text-lg text-white outline-none transition focus:border-white/40"
             />
 
+            <label className="flex items-start gap-3 rounded-[18px] border border-white/10 bg-[#08101f]/40 p-4 text-sm text-white/70">
+              <input
+                type="checkbox"
+                checked={agree}
+                onChange={(e) => setAgree(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-cyan-400"
+              />
+
+             <span>
+                Я даю согласие на обработку персональных данных в соответствии с
+               Федеральным законом №152-ФЗ «О персональных данных».
+              </span>
+            </label>
             <button
               type="submit"
-              className="mt-3 h-[64px] rounded-[18px] border border-white bg-white text-lg uppercase tracking-[0.15em] text-[#07101f] transition hover:bg-transparent hover:text-white"
-            >
-              Зарегистрироваться
+              disabled={!agree}
+              className={`mt-3 h-[64px] rounded-[18px] text-lg uppercase tracking-[0.15em] transition ${
+                agree
+                  ? "border border-white bg-white text-[#07101f] hover:bg-transparent hover:text-white"
+                  : "cursor-not-allowed border border-white/10 bg-white/10 text-white/40"
+                        }`}
+              >
+                Зарегистрироваться
             </button>
           </form>
 
