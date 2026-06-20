@@ -13,25 +13,31 @@ export default function Register() {
   });
 
   const [error, setError] = useState("");
+  const [agree, setAgree] = useState(false);
+
+  function handleChange(e) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  }
 
   async function handleSubmit(e) {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  if (!agree) {
-    setError(
-      "Необходимо дать согласие на обработку персональных данных"
-    );
-    return;
-  }
+    if (!agree) {
+      setError("Необходимо дать согласие на обработку персональных данных");
+      return;
+    }
 
-  try {
-    await api.post("/auth/register/", form);
-    navigate("/login");
-  } catch {
-    setError("Ошибка регистрации");
+    try {
+      await api.post("/auth/register/", form);
+      navigate("/login");
+    } catch {
+      setError("Ошибка регистрации");
+    }
   }
-}
 
   return (
     <>
@@ -41,7 +47,6 @@ export default function Register() {
       />
 
       <section className="wave-bg relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-20">
-        {/* glow */}
         <div className="absolute left-[-120px] top-20 h-[320px] w-[320px] rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="absolute bottom-10 right-[-120px] h-[320px] w-[320px] rounded-full bg-blue-500/10 blur-3xl" />
 
@@ -60,10 +65,7 @@ export default function Register() {
             </div>
           )}
 
-          <form
-            onSubmit={handleSubmit}
-            className="mt-10 flex flex-col gap-5"
-          >
+          <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-5">
             <input
               type="text"
               name="username"
@@ -102,11 +104,12 @@ export default function Register() {
                 className="mt-1 h-4 w-4 accent-cyan-400"
               />
 
-             <span>
+              <span>
                 Я даю согласие на обработку персональных данных в соответствии с
-               Федеральным законом №152-ФЗ «О персональных данных».
+                Федеральным законом №152-ФЗ «О персональных данных».
               </span>
             </label>
+
             <button
               type="submit"
               disabled={!agree}
@@ -114,18 +117,15 @@ export default function Register() {
                 agree
                   ? "border border-white bg-white text-[#07101f] hover:bg-transparent hover:text-white"
                   : "cursor-not-allowed border border-white/10 bg-white/10 text-white/40"
-                        }`}
-              >
-                Зарегистрироваться
+              }`}
+            >
+              Зарегистрироваться
             </button>
           </form>
 
           <p className="mt-8 text-center uppercase tracking-[0.12em] text-white/50">
             Уже есть аккаунт?{" "}
-            <Link
-              to="/login"
-              className="text-white transition hover:text-cyan-200"
-            >
+            <Link to="/login" className="text-white transition hover:text-cyan-200">
               Войти
             </Link>
           </p>
