@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Oi&display=swap");
+
 @import "tailwindcss";
 
 * {
@@ -105,7 +105,7 @@ img {
       rgba(7, 16, 31, 0.72),
       rgba(7, 16, 31, 0.92)
     ),
-    url("/images/waves-bg.png");
+    url("/images/waves-bg.webp");
   background-size: cover;
   background-position: center;
   background-repeat: repeat-y;
