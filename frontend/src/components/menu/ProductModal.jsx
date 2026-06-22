@@ -92,11 +92,13 @@ function ProductModal({ product, onClose }) {
       .join("-");
 
     const cartItem = {
-      id: `${product.id || product.name}-${selectedSize?.id || selectedSize?.name || "base"}-${modifierIds}`,
-      productId: product.id,
+      cartId: `${product.id}-${selectedSize?.id || "base"}-${modifierIds}`,
+      product: Number(product.id),
+      product_id: Number(product.id),
       name: product.name,
       image,
       size: selectedSize,
+      size_id: selectedSize?.id || null,
       modifiers,
       price: finalPrice,
       quantity: 1,
@@ -104,7 +106,7 @@ function ProductModal({ product, onClose }) {
 
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingIndex = currentCart.findIndex(
-      (item) => item.id === cartItem.id
+      (item) => item.cartId === cartItem.cartId
     );
 
     const nextCart =

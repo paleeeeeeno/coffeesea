@@ -124,7 +124,7 @@ export default function Profile() {
                     <div className="flex flex-col justify-between gap-5 md:flex-row">
                       <div>
                         <h3 className="text-2xl font-black uppercase text-white">
-                          Заказ #{order.id}
+                          Заказ №{index + 1}
                         </h3>
 
                         <p className="mt-2 text-sm uppercase leading-6 text-white/70 md:text-base">
