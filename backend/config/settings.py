@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import dj_database_url
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get(
@@ -72,6 +73,7 @@ DATABASES = {
         conn_max_age=600,
     )
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
