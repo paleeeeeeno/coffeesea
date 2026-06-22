@@ -45,18 +45,23 @@ export default function Checkout() {
     return;
   }
 
-  const items = cart.map((item) => ({
-    product: item.product?.id || item.product_id || item.id,
-    size: item.size?.id || item.size_id || null,
-    modifiers: (item.modifiers || []).map((modifier) =>
-      modifier.id ? modifier.id : modifier
-    ),
-    quantity: item.quantity || 1,
-    final_price: item.price || item.final_price || 0,
-  }));
+ const items = cart.map((item) => {
+  const productId =
+    item.product?.id ||
+    item.product_id ||
+    item.id ||
+    item.product;
 
-  console.log("CART:", cart);
-  console.log("ITEMS:", items);
+  return {
+    product: Number(productId),
+    size: item.size?.id ? Number(item.size.id) : item.size_id ? Number(item.size_id) : null,
+    modifiers: (item.modifiers || [])
+      .map((modifier) => Number(modifier.id || modifier))
+      .filter(Boolean),
+    quantity: Number(item.quantity || 1),
+    final_price: String(item.price || item.final_price || 0),
+  };
+});
 
   try {
     await api.post("/orders/", {
