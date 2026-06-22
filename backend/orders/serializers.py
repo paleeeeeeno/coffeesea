@@ -28,6 +28,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "cafe_address",
             "status",
             "total_price",
+            "bonus_spent",
             "bonus_earned",
             "created_at",
             "items",

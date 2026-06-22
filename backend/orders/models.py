@@ -40,6 +40,7 @@ class Order(models.Model):
     total_price = models.DecimalField("Сумма", max_digits=10, decimal_places=2)
     bonus_earned = models.PositiveIntegerField("Начислено бонусов", default=0)
     created_at = models.DateTimeField("Дата заказа", auto_now_add=True)
+    bonus_spent = models.PositiveIntegerField("Списано бонусов", default=0)
 
     class Meta:
         verbose_name = "Заказ"
