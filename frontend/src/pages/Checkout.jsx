@@ -47,7 +47,7 @@ export default function Checkout() {
 
   const items = cart
   .map((item) => ({
-    product: Number(item.product_id || item.product),
+    product: Number(item.productId || item.product),
     size: item.size_id ? Number(item.size_id) : null,
     modifiers: (item.modifiers || [])
       .map((modifier) => Number(modifier.id || modifier))
@@ -56,13 +56,6 @@ export default function Checkout() {
     final_price: String(item.price || item.final_price || 0),
   }))
   .filter((item) => Number.isInteger(item.product) && item.product > 0);
-
-  if (items.length === 0) {
-  setError("Ошибка: товары в корзине не имеют id из базы данных.");
-  console.log("CART:", cart);
-  console.log("ITEMS:", items);
-  return;
-  }
 
   try {
     await api.post("/orders/", {
