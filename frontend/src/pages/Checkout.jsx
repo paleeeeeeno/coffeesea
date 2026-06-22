@@ -47,8 +47,8 @@ export default function Checkout() {
 
   const items = cart
   .map((item) => ({
-    product: Number(item.productId || item.product),
-    size: item.size_id ? Number(item.size_id) : null,
+    product: Number(item.productId || item.product_id || item.product || item.id),
+    size: item.size?.id ? Number(item.size.id) : null,
     modifiers: (item.modifiers || [])
       .map((modifier) => Number(modifier.id || modifier))
       .filter(Boolean),
