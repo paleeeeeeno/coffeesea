@@ -116,7 +116,7 @@ export default function Profile() {
               </div>
             ) : (
               <div className="orders-grid mt-6 grid gap-5">
-                {orders.map((order) => (
+                {orders.map((order, index) => (
                   <article
                     key={order.id}
                     className="glass-card glow-hover rounded-[28px] p-6"
