@@ -55,6 +55,9 @@ export default function Checkout() {
     final_price: item.price || item.final_price || 0,
   }));
 
+  console.log("CART:", cart);
+  console.log("ITEMS:", items);
+
   try {
     await api.post("/orders/", {
       delivery_type: deliveryType,
