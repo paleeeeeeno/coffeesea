@@ -31,37 +31,47 @@ export default function Checkout() {
     [cart]
   );
 
-  async function createOrder(event) {
-    event.preventDefault();
-    setError("");
+ async function createOrder(event) {
+  event.preventDefault();
+  setError("");
 
-    if (cart.length === 0) {
-      setError("Корзина пустая.");
-      return;
-    }
-
-    if (deliveryType === "delivery" && !address.trim()) {
-      setError("Введите адрес доставки.");
-      return;
-    }
-
-    try {
-      await api.post("/orders/", {
-        payment_type: paymentType,
-        delivery_type: deliveryType,
-        address: deliveryType === "delivery" ? address : "",
-        cafe_address: deliveryType === "pickup" ? cafeAddress : "",
-        total_price: total,
-      });
-
-      localStorage.removeItem("cart");
-      window.dispatchEvent(new Event("cart-updated"));
-      navigate("/profile");
-    } catch (err) {
-      console.log("ОШИБКА ЗАКАЗА:", err.response?.data || err);
-      setError("Ошибка оформления заказа. Проверьте вход в аккаунт.");
-    }
+  if (cart.length === 0) {
+    setError("Корзина пустая.");
+    return;
   }
+
+  if (deliveryType === "delivery" && !address.trim()) {
+    setError("Введите адрес доставки.");
+    return;
+  }
+
+  const items = cart.map((item) => ({
+    product: item.product?.id || item.product_id || item.id,
+    size: item.size?.id || item.size_id || null,
+    modifiers: (item.modifiers || []).map((modifier) =>
+      modifier.id ? modifier.id : modifier
+    ),
+    quantity: item.quantity || 1,
+    final_price: item.price || item.final_price || 0,
+  }));
+
+  try {
+    await api.post("/orders/", {
+      delivery_type: deliveryType,
+      address: deliveryType === "delivery" ? address : "",
+      cafe_address: deliveryType === "pickup" ? cafeAddress : "",
+      total_price: total,
+      items: items,
+    });
+
+    localStorage.removeItem("cart");
+    window.dispatchEvent(new Event("cart-updated"));
+    navigate("/profile");
+  } catch (err) {
+    console.log("ОШИБКА ЗАКАЗА:", err.response?.data || err);
+    setError("Ошибка оформления заказа. Проверьте вход в аккаунт.");
+  }
+}
 
   const optionClass = (active) =>
     `min-h-[58px] rounded-[14px] border px-5 py-4 text-center text-sm font-semibold uppercase tracking-[0.08em] transition ${
