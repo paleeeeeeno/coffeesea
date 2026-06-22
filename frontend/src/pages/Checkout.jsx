@@ -12,6 +12,8 @@ export default function Checkout() {
   const [address, setAddress] = useState("");
   const [cafeAddress, setCafeAddress] = useState("Coffee Sea, ул. Морская, 10");
   const [error, setError] = useState("");
+  const [bonusPoints, setBonusPoints] = useState(0);
+  const [bonusSpent, setBonusSpent] = useState(0);
 
   useEffect(() => {
     try {
@@ -31,6 +33,21 @@ export default function Checkout() {
     [cart]
   );
 
+  useEffect(() => {
+  async function loadBonus() {
+    try {
+      const res = await api.get("/bonus/");
+      setBonusPoints(res.data.points || 0);
+    } catch {
+      setBonusPoints(0);
+    }
+  }
+
+  loadBonus();
+  }, []);
+
+  const finalTotal = Math.max(total - Number(bonusSpent || 0), 0);
+
  async function createOrder(event) {
   event.preventDefault();
   setError("");
@@ -46,16 +63,21 @@ export default function Checkout() {
   }
 
   const items = cart
-  .map((item) => ({
-    product: Number(item.productId || item.product_id || item.product || item.id),
-    size: item.size?.id ? Number(item.size.id) : null,
-    modifiers: (item.modifiers || [])
-      .map((modifier) => Number(modifier.id || modifier))
-      .filter(Boolean),
-    quantity: Number(item.quantity || 1),
-    final_price: String(item.price || item.final_price || 0),
-  }))
-  .filter((item) => Number.isInteger(item.product) && item.product > 0);
+    .map((item) => ({
+      product: Number(item.productId || item.product_id || item.product || item.id),
+      size: item.size?.id ? Number(item.size.id) : null,
+      modifiers: (item.modifiers || [])
+        .map((modifier) => Number(modifier.id || modifier))
+        .filter(Boolean),
+      quantity: Number(item.quantity || 1),
+      final_price: String(item.price || item.final_price || 0),
+    }))
+    .filter((item) => Number.isInteger(item.product) && item.product > 0);
+
+  if (items.length === 0) {
+    setError("Ошибка: товары в корзине не имеют id из базы данных.");
+    return;
+  }
 
   try {
     await api.post("/orders/", {
@@ -63,6 +85,7 @@ export default function Checkout() {
       address: deliveryType === "delivery" ? address : "",
       cafe_address: deliveryType === "pickup" ? cafeAddress : "",
       total_price: total,
+      bonus_spent: Number(bonusSpent || 0),
       items: items,
     });
 
@@ -190,9 +213,33 @@ export default function Checkout() {
               </div>
             )}
 
+            <div className="mt-6">
+              <label className="text-sm font-semibold uppercase text-white/80">
+                Списать бонусы
+              </label>
+
+              <p className="mt-2 text-sm uppercase text-white/50">
+                Доступно бонусов: {bonusPoints}
+              </p>
+
+              <input
+                type="number"
+                min="0"
+                max={Math.min(bonusPoints, total)}
+                value={bonusSpent}
+                onChange={(e) => {
+                  const value = Number(e.target.value || 0);
+                  const max = Math.min(bonusPoints, total);
+                  setBonusSpent(Math.min(value, max));
+                }}
+                className="form-field mt-3 w-full rounded-[14px] px-4 py-3"
+                placeholder="Введите количество бонусов"
+              />
+            </div>
+
             <div className="mt-8 border-t border-white/10 pt-6">
               <p className="text-2xl font-black uppercase md:text-4xl">
-                Итого: {total.toLocaleString("ru-RU")}₽
+                Итого: {finalTotal.toLocaleString("ru-RU")}₽
               </p>
 
               <button
