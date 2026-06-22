@@ -123,9 +123,9 @@ export default function Profile() {
                   >
                     <div className="flex flex-col justify-between gap-5 md:flex-row">
                       <div>
-                        <h3 className="text-2xl font-black uppercase text-white">
-                          Заказ №{index + 1}
-                        </h3>
+                        <div key={order.id}>
+                          <h3>Заказ №{index + 1}</h3>
+                        </div>
 
                         <p className="mt-2 text-sm uppercase leading-6 text-white/70 md:text-base">
                           Статус: {order.status || "В обработке"}
