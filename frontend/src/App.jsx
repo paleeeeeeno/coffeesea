@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import ScrollToTop from "./components/ScrollToTop";
 import ProtectedRoute from "./router/ProtectedRoute";
+import CookieBanner from "./components/CookieBanner";
 
 const Home = lazy(() => import("./pages/Home"));
 const Menu = lazy(() => import("./pages/Menu"));
@@ -85,6 +86,7 @@ export default function App() {
           </main>
 
           <Footer />
+          <CookieBanner />
         </div>
       </BrowserRouter>
     </QueryClientProvider>
