@@ -9,6 +9,29 @@ const navLinks = [
   { to: "/contacts", label: "Связь с нами" },
 ];
 
+const [cartCount, setCartCount] = useState(0);
+
+useEffect(() => {
+  const updateCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    const total = cart.reduce(
+      (sum, item) => sum + Number(item.quantity || 1),
+      0
+    );
+
+    setCartCount(total);
+  };
+
+  updateCartCount();
+
+  window.addEventListener("cart-updated", updateCartCount);
+
+  return () => {
+    window.removeEventListener("cart-updated", updateCartCount);
+  };
+}, []);
+
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -61,6 +84,12 @@ export default function Header() {
               aria-label="Корзина"
             >
               <ShoppingCart className="site-header__icon" strokeWidth={2.2} />
+
+              {cartCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full border border-white bg-[#f8f8f3] px-1 text-[11px] font-black text-[#07101f] shadow-lg">
+                  {cartCount}
+                </span>
+              )}
             </Link>
 
             <Link
