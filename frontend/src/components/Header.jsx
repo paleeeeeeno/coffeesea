@@ -9,7 +9,9 @@ const navLinks = [
   { to: "/contacts", label: "Связь с нами" },
 ];
 
-const [cartCount, setCartCount] = useState(0);
+export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
 useEffect(() => {
   const updateCartCount = () => {
@@ -32,8 +34,6 @@ useEffect(() => {
   };
 }, []);
 
-export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
