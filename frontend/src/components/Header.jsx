@@ -79,14 +79,12 @@ useEffect(() => {
           <div className="site-header__actions">
             <Link
               to="/cart"
-              onClick={closeMenu}
-              className="site-header__icon-link"
-              aria-label="Корзина"
+              className="relative flex h-10 w-10 items-center justify-center"
             >
-              <ShoppingCart className="site-header__icon" strokeWidth={2.2} />
+              <ShoppingCart size={26} />
 
               {cartCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full border border-white bg-[#f8f8f3] px-1 text-[11px] font-black text-[#07101f] shadow-lg">
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-[10px] font-black leading-none text-[#07101f]">
                   {cartCount}
                 </span>
               )}
