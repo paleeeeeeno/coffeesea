@@ -123,9 +123,9 @@ export default function Profile() {
                   >
                     <div className="flex flex-col justify-between gap-5 md:flex-row">
                       <div>
-                        <div key={order.id}>
-                          <h3>Заказ №{index + 1}</h3>
-                        </div>
+                        <h3 className="text-2xl font-black uppercase text-white">
+                          Заказ №{index + 1}
+                        </h3>
 
                         <p className="mt-2 text-sm uppercase leading-6 text-white/70 md:text-base">
                           Статус: {order.status || "В обработке"}
@@ -137,17 +137,76 @@ export default function Profile() {
                             ? "Доставка"
                             : "Самовывоз"}
                         </p>
+
+                        {order.address && (
+                          <p className="text-sm uppercase leading-6 text-white/70 md:text-base">
+                            Адрес: {order.address}
+                          </p>
+                        )}
+
+                        {order.cafe_address && (
+                          <p className="text-sm uppercase leading-6 text-white/70 md:text-base">
+                            Кофейня: {order.cafe_address}
+                          </p>
+                        )}
                       </div>
 
                       <div className="text-left md:text-right">
                         <p className="text-3xl font-black text-white">
-                          {order.total_price}₽
+                          {Number(order.total_price).toLocaleString("ru-RU")}₽
                         </p>
+
+                        {Number(order.bonus_spent || 0) > 0 && (
+                          <p className="text-sm uppercase leading-6 text-white/70 md:text-base">
+                            -{order.bonus_spent} бонусов
+                          </p>
+                        )}
 
                         <p className="text-sm uppercase leading-6 text-white/70 md:text-base">
                           +{order.bonus_earned || 0} бонусов
                         </p>
                       </div>
+                    </div>
+
+                    <div className="mt-6 border-t border-white/10 pt-5">
+                      <h4 className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-white/60">
+                        Состав заказа
+                      </h4>
+
+                      {order.items && order.items.length > 0 ? (
+                        <div className="grid gap-3">
+                          {order.items.map((item) => (
+                            <div
+                              key={item.id}
+                              className="flex flex-col justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 md:flex-row md:items-center"
+                            >
+                              <div>
+                                <p className="font-bold uppercase text-white">
+                                  {item.product_name || item.product?.name || "Товар"}
+                                </p>
+
+                                {item.size_name && (
+                                  <p className="mt-1 text-sm uppercase text-white/60">
+                                    Размер: {item.size_name}
+                                  </p>
+                                )}
+
+                                <p className="mt-1 text-sm uppercase text-white/60">
+                                  Количество: {item.quantity}
+                                </p>
+                              </div>
+
+                              <p className="text-lg font-black text-white">
+                                {Number(item.final_price).toLocaleString("ru-RU")}₽
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm uppercase text-white/50">
+                          Состав заказа не указан
+                        </p>
+                      )}
                     </div>
                   </article>
                 ))}

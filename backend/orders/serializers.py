@@ -3,12 +3,17 @@ from .models import Order, OrderItem, BonusAccount
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source="product.name", read_only=True)
+    size_name = serializers.CharField(source="size.name", read_only=True)
+
     class Meta:
         model = OrderItem
         fields = [
             "id",
             "product",
+            "product_name",
             "size",
+            "size_name",
             "modifiers",
             "quantity",
             "final_price",
