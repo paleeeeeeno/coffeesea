@@ -67,51 +67,47 @@ export default function Cafes() {
           )}
 
           {!isLoading && !isError && cafes.length > 0 && (
-            <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1.3fr]">
-              <div className="grid gap-5">
-                {cafes.map((cafe) => (
-                  <button
-                    key={cafe.id}
-                    type="button"
-                    onClick={() => setSelectedCafe(cafe)}
-                    className={`rounded-[28px] p-5 text-left transition md:p-6 ${
-                      selectedCafe?.id === cafe.id
-                        ? "border border-white bg-white text-[#1d2946]"
-                        : "glass-card glow-hover text-white"
-                    }`}
-                  >
-                    <h2 className="text-2xl font-black uppercase leading-tight md:text-3xl">
-                      {cafe.title}
-                    </h2>
+            <div className="mx-auto mt-12 grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="flex flex-col gap-5">
+                {cafes.map((cafe) => {
+                  const active = selectedCafe?.id === cafe.id;
 
-                    <div className="mt-4 space-y-2">
-                      <p className="text-sm uppercase leading-6 md:text-base">
-                        Адрес: {cafe.address}
-                      </p>
+                  return (
+                    <button
+                      key={cafe.id}
+                      type="button"
+                      onClick={() => setSelectedCafe(cafe)}
+                      className={`rounded-[28px] border p-6 text-left text-white transition md:p-7 ${
+                        active
+                          ? "border-white/50 bg-white/10 shadow-2xl"
+                          : "border-white/15 bg-[#07101f]/85 hover:border-white/40 hover:bg-white/10"
+                      }`}
+                    >
+                      <h2 className="text-2xl font-black uppercase leading-tight tracking-wide md:text-3xl">
+                        {cafe.title || cafe.name}
+                      </h2>
 
-                      <p className="text-sm uppercase leading-6 md:text-base">
-                        Телефон: {cafe.phone}
-                      </p>
-
-                      <p className="text-sm uppercase leading-6 md:text-base">
-                        График: {cafe.work_time}
-                      </p>
-                    </div>
-                  </button>
-                ))}
+                      <div className="mt-5 space-y-3 text-sm uppercase leading-6 text-white/75 md:text-base">
+                        <p>Адрес: {cafe.address}</p>
+                        <p>Телефон: {cafe.phone}</p>
+                        <p>График: {cafe.work_time}</p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
 
-              <div className="glass-card glow-hover overflow-hidden rounded-[28px] p-3 md:p-4">
+              <div className="rounded-[28px] border border-white/15 bg-[#07101f]/85 p-4 shadow-2xl backdrop-blur">
                 {mapUrl ? (
                   <iframe
                     title="Карта кофейни"
                     src={mapUrl}
-                    className="h-[320px] w-full rounded-[22px] md:h-[500px]"
+                    className="h-[420px] w-full rounded-[22px] md:h-[560px]"
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                   />
                 ) : (
-                  <div className="flex h-[320px] items-center justify-center text-center text-sm uppercase text-white/70 md:h-[500px] md:text-base">
+                  <div className="flex h-[420px] items-center justify-center rounded-[22px] border border-white/10 text-center text-sm uppercase text-white/70 md:h-[560px] md:text-base">
                     У кофейни не указаны координаты
                   </div>
                 )}
