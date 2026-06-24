@@ -27,7 +27,7 @@ export default function Register() {
     e.preventDefault();
     setError("");
 
-    if (!agreePersonal || !agreeTerms || !agreeCookies) {
+    if (!agreePersonal || !agreeTerms) {
       setError("Необходимо принять все условия регистрации");
       return;
     }
@@ -40,7 +40,7 @@ export default function Register() {
     }
   }
 
-  const canRegister = agreePersonal && agreeTerms && agreeCookies;
+  const canRegister = agreePersonal && agreeTerms;
 
   return (
     <>
