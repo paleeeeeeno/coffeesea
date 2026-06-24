@@ -28,11 +28,10 @@ export default function Register() {
     e.preventDefault();
     setError("");
 
-   if (!agreePersonal || !agreeTerms || !agreeCookies) {
-    setError("Необходимо принять все условия регистрации");
-    return;
-}
-}
+    if (!agreePersonal || !agreeTerms || !agreeCookies) {
+      setError("Необходимо принять все условия регистрации");
+      return;
+    }
 
     try {
       await api.post("/auth/register/", form);
@@ -41,6 +40,8 @@ export default function Register() {
       setError("Ошибка регистрации");
     }
   }
+
+  const canRegister = agreePersonal && agreeTerms && agreeCookies;
 
   return (
     <>
@@ -100,68 +101,64 @@ export default function Register() {
             />
 
             <label className="flex items-start gap-3 rounded-[18px] border border-white/10 bg-[#08101f]/40 p-4 text-sm text-white/70">
-  <input
-    type="checkbox"
-    checked={agreePersonal}
-    onChange={(e) => setAgreePersonal(e.target.checked)}
-    className="mt-1 h-4 w-4 accent-cyan-400"
-  />
+              <input
+                type="checkbox"
+                checked={agreePersonal}
+                onChange={(e) => setAgreePersonal(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-cyan-400"
+              />
+              <span>
+                Я даю согласие на обработку персональных данных в соответствии с Федеральным законом №152-ФЗ.
+              </span>
+            </label>
 
-  <span>
-    Я даю согласие на обработку персональных данных в соответствии с
-    Федеральным законом №152-ФЗ.
-  </span>
-</label>
+            <label className="flex items-start gap-3 rounded-[18px] border border-white/10 bg-[#08101f]/40 p-4 text-sm text-white/70">
+              <input
+                type="checkbox"
+                checked={agreeTerms}
+                onChange={(e) => setAgreeTerms(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-cyan-400"
+              />
+              <span>
+                Я принимаю{" "}
+                <a
+                  href="/documents/user-agreement.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-white underline"
+                >
+                  пользовательское соглашение
+                </a>
+                .
+              </span>
+            </label>
 
-<label className="flex items-start gap-3 rounded-[18px] border border-white/10 bg-[#08101f]/40 p-4 text-sm text-white/70">
-  <input
-    type="checkbox"
-    checked={agreeTerms}
-    onChange={(e) => setAgreeTerms(e.target.checked)}
-    className="mt-1 h-4 w-4 accent-cyan-400"
-  />
-
-  <span>
-    Я принимаю{" "}
-    <a
-      href="/documents/user-agreement.pdf"
-      target="_blank"
-      rel="noreferrer"
-      className="text-white underline"
-    >
-      пользовательское соглашение
-    </a>
-    .
-  </span>
-</label>
-
-<label className="flex items-start gap-3 rounded-[18px] border border-white/10 bg-[#08101f]/40 p-4 text-sm text-white/70">
-  <input
-    type="checkbox"
-    checked={agreeCookies}
-    onChange={(e) => setAgreeCookies(e.target.checked)}
-    className="mt-1 h-4 w-4 accent-cyan-400"
-  />
-
-  <span>
-    Я согласен на использование файлов{" "}
-    <a
-      href="/documents/cookies-policy.pdf"
-      target="_blank"
-      rel="noreferrer"
-      className="text-white underline"
-    >
-      Cookie
-    </a>
-    .
-  </span>
-</label>
+            <label className="flex items-start gap-3 rounded-[18px] border border-white/10 bg-[#08101f]/40 p-4 text-sm text-white/70">
+              <input
+                type="checkbox"
+                checked={agreeCookies}
+                onChange={(e) => setAgreeCookies(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-cyan-400"
+              />
+              <span>
+                Я согласен на использование файлов{" "}
+                <a
+                  href="/documents/cookies-policy.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-white underline"
+                >
+                  Cookie
+                </a>
+                .
+              </span>
+            </label>
 
             <button
               type="submit"
-              disabled={!agreePersonal || !agreeTerms || !agreeCookies}
+              disabled={!canRegister}
               className={`mt-3 h-[64px] rounded-[18px] text-lg uppercase tracking-[0.15em] transition ${
-                agreePersonal && agreeTerms && agreeCookies
+                canRegister
                   ? "border border-white bg-white text-[#07101f] hover:bg-transparent hover:text-white"
                   : "cursor-not-allowed border border-white/10 bg-white/10 text-white/40"
               }`}
@@ -180,3 +177,4 @@ export default function Register() {
       </section>
     </>
   );
+}
